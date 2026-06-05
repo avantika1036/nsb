@@ -7,6 +7,7 @@
 #include <list>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <array>
 #include <algorithm>
 // Thread libraries.

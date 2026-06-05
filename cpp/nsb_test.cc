@@ -51,7 +51,7 @@ int testLifecycle() {
     NSBAppClient app1 = NSBAppClient(idApp1, nsbDaemonAddr, nsbDaemonPort);
     NSBAppClient app2 = NSBAppClient(idApp2, nsbDaemonAddr, nsbDaemonPort);
     NSBSimClient sim1 = NSBSimClient(idSim1, nsbDaemonAddr, nsbDaemonPort);
-    NSBSimClient sim2 = NSBSimClient(idSim1, nsbDaemonAddr, nsbDaemonPort);
+    NSBSimClient sim2 = NSBSimClient(idSim2, nsbDaemonAddr, nsbDaemonPort);
     app1.ping();
     app2.ping();
     sim1.ping();
@@ -59,33 +59,52 @@ int testLifecycle() {
     // Send a message.
     std::string payload1 = "Hello from app1";
     std::string payload2 = "Hola del app1";
+    std::string payload3 = "Bonjour de l'app2";
+    std::string payload4 = "Geia sou apo app2";
+    LOG(INFO) << "----- SENDING MESSAGES -----" << std::endl;
     app1.send(idApp2, payload1);
     app1.send(idApp2, payload2);
+    app2.send(idApp1, payload3);
+    app2.send(idApp1, payload4);
     // Go through the simulator.
     for (int i=0; i<3; i++) {
-        MessageEntry fetchedMsg = sim1.fetch();
-        if (fetchedMsg.exists()) {
-            sim2.post(idSim1, idApp2, fetchedMsg.payload_obj);
+        LOG(INFO) << "----- FETCHING FROM SIM. " << idSim1 << " ITERATION " << i << " -----" << std::endl;
+        MessageEntry fetchedMsg1 = sim1.fetch();
+        if (fetchedMsg1.exists()) {
+            sim2.post(idApp1, idApp2, fetchedMsg1.payload_obj);
         } else {
-            LOG(ERROR) << "No message to fetch." << std::endl;
+            if (i < 2) {LOG(ERROR) << "No message to fetch." << std::endl;}
+            else {LOG(INFO) << "Didn't fetch message and that's okay." << std::endl;}
+        }
+        LOG(INFO) << "----- FETCHING FROM SIM. " << idSim2 << " ITERATION " << i << " -----" << std::endl;
+        MessageEntry fetchedMsg2 = sim2.fetch();
+        if (fetchedMsg2.exists()) {
+            sim1.post(idApp2, idApp1, fetchedMsg2.payload_obj);
+        } else {
+            if (i < 2) {LOG(ERROR) << "No message to fetch." << std::endl;}
+            else {LOG(INFO) << "Didn't fetch message and that's okay." << std::endl;}
         }
     }
     // Receive a message.
+    LOG(INFO) << "----- RECEIVING FROM APP " << idApp1 << " -----" << std::endl;
     for (int i=0; i<3; i++) {
-        MessageEntry receivedMsg = app1.receive();
-        if (receivedMsg.exists()) {
-            LOG(INFO) << "Received payload: " << receivedMsg.payload_obj << std::endl;
+        MessageEntry receivedMsg1 = app1.receive();
+        if (receivedMsg1.exists()) {
+            LOG(INFO) << "Received payload: " << receivedMsg1.payload_obj << std::endl;
         } else {
-            LOG(ERROR) << "Didn't receive payload." << std::endl;
+            if (i < 2) {LOG(ERROR) << "Didn't receive payload." << std::endl;}
+            else {LOG(INFO) << "Didn't receive payload and that's okay." << std::endl;}
         }
     }
     // Receive a message.
+    LOG(INFO) << "----- RECEIVING FROM APP " << idApp2 << " -----" << std::endl;
     for (int i=0; i<3; i++) {
-        MessageEntry receivedMsg = app2.receive();
-        if (receivedMsg.exists()) {
-            LOG(INFO) << "Received payload: " << receivedMsg.payload_obj << std::endl;
+        MessageEntry receivedMsg2 = app2.receive();
+        if (receivedMsg2.exists()) {
+            LOG(INFO) << "Received payload: " << receivedMsg2.payload_obj << std::endl;
         } else {
-            LOG(ERROR) << "Didn't receive payload." << std::endl;
+            if (i < 2) {LOG(ERROR) << "Didn't receive payload." << std::endl;}
+            else {LOG(INFO) << "Didn't receive payload and that's okay." << std::endl;}
         }
     }
     // Exit.

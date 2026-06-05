@@ -325,8 +325,8 @@ namespace nsb {
                 << msg_entry.source << " | dest: " 
                 << msg_entry.destination << std::endl;
             DLOG(INFO) << (cfg.USE_DB ? "\tPayload ID: ": "\tPayload: ") << msg_entry.payload_obj << std::endl;
-            // Add it to the buffer.
-            tx_buffer.push_back(msg_entry);
+            // Add it to the per-source queue.
+            tx_buffer[msg_entry.source].push_back(msg_entry);
         } else if (cfg.SYSTEM_MODE == Config::SystemMode::PUSH) {
             LOG(INFO).NoPrefix() << "PUSH mode..." << std::endl;
             // Copy the incoming message to the outgoing message, replacing with SEND to FORWARD.
@@ -379,18 +379,19 @@ namespace nsb {
         if (incoming_msg->has_metadata()) {
             nsb::nsbm::Metadata in_metadata = incoming_msg->metadata();
             if (in_metadata.has_src_id()) {
-                // Search for the message in the buffer.
-                auto it = std::find_if(tx_buffer.begin(), tx_buffer.end(),
-                          [&](const auto& msg) { return msg.source == in_metadata.src_id(); });
-                if (it != tx_buffer.end()) {
-                    fetched_message = *it;
-                    tx_buffer.erase(it);
+                auto it = tx_buffer.find(in_metadata.src_id());
+                if (it != tx_buffer.end() && !it->second.empty()) {
+                    fetched_message = it->second.front();
+                    it->second.pop_front();
                 }
             } else {
-                // If source not specified, pop the next message in the queue.
-                if (!tx_buffer.empty()) {
-                    fetched_message = tx_buffer.front();
-                    tx_buffer.pop_front();
+                // If source not specified, pop from the first non-empty queue.
+                for (auto& [key, queue] : tx_buffer) {
+                    if (!queue.empty()) {
+                        fetched_message = queue.front();
+                        queue.pop_front();
+                        break;
+                    }
                 }
             }
         }
@@ -446,7 +447,8 @@ namespace nsb {
                         << msg_entry.source << " | dest: " 
                         << msg_entry.destination << "\n\tPayload: " 
                         << msg_entry.payload_obj << std::endl;
-                rx_buffer.push_back(msg_entry);
+                // Add it to the per-destination queue.
+                rx_buffer[msg_entry.destination].push_back(msg_entry);
             }
         } else if (cfg.SYSTEM_MODE == Config::SystemMode::PUSH) {
             LOG(INFO).NoPrefix() << "PUSH mode..." << std::endl;
@@ -499,18 +501,19 @@ namespace nsb {
         if (incoming_msg->has_metadata()) {
             nsb::nsbm::Metadata in_metadata = incoming_msg->metadata();
             if (in_metadata.has_dest_id()) {
-                // Search for the message in the buffer.
-                auto it = std::find_if(rx_buffer.begin(), rx_buffer.end(),
-                          [&](const auto& msg) { return msg.destination == in_metadata.dest_id(); });
-                if (it != rx_buffer.end()) {
-                    received_message = *it;
-                    rx_buffer.erase(it);
+                auto it = rx_buffer.find(in_metadata.dest_id());
+                if (it != rx_buffer.end() && !it->second.empty()) {
+                    received_message = it->second.front();
+                    it->second.pop_front();
                 }
             } else {
-                // If destination not specified, pop the next message in the queue.
-                if (!rx_buffer.empty()) {
-                    received_message = rx_buffer.front();
-                    rx_buffer.pop_front();
+                // If destination not specified, pop from the first non-empty queue.
+                for (auto& [key, queue] : rx_buffer) {
+                    if (!queue.empty()) {
+                        received_message = queue.front();
+                        queue.pop_front();
+                        break;
+                    }
                 }
             }
         }

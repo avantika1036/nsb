@@ -83,8 +83,8 @@ namespace nsb {
         }
         // Parse in message.
         nsb::nsbm nsbResponse = nsb::nsbm();
-        if (!nsbMsg.ParseFromString(response)) {
-            LOG(WARNING) << "ParseFromString failed for nsbMsg";
+        if (!nsbResponse.ParseFromString(response)) {
+            LOG(WARNING) << "ParseFromString failed for nsbResponse";
         };
         // Check for expected operation.
         if (nsbResponse.manifest().op() == nsb::nsbm::Manifest::INIT) {
@@ -145,8 +145,8 @@ namespace nsb {
         }
         // Parse in message.
         nsb::nsbm nsbResponse = nsb::nsbm();
-        if (!nsbMsg.ParseFromString(response)) {
-            LOG(WARNING) << "ParseFromString failed for nsbMsg";
+        if (!nsbResponse.ParseFromString(response)) {
+            LOG(WARNING) << "ParseFromString failed for nsbResponse";
         };
         // Check for expected operation.
         if (nsbResponse.manifest().op() == nsb::nsbm::Manifest::PING) {
