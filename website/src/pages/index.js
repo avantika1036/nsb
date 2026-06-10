@@ -1,43 +1,49 @@
-import clsx from 'clsx';
-import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React from 'react';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
-import Heading from '@theme/Heading';
-import styles from './index.module.css';
-
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/intro">
-            Docusaurus Tutorial - 5min ⏱️
-          </Link>
-        </div>
-      </div>
-    </header>
-  );
-}
+import SectionContainer from '../components/SectionContainer';
+import FeatureCard from '../components/FeatureCard';
 
 export default function Home() {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
-      <main>
-        <HomepageFeatures />
-      </main>
+      title="Network Simulation Bridge"
+      description="Bridge applications with simulated networks">
+
+      <SectionContainer>
+        <h1>Network Simulation Bridge</h1>
+
+        <p>
+          Bridge real applications with simulated networks through a unified
+          middleware layer.
+        </p>
+
+        <p>
+          This website is currently being rebuilt as part of the NSB onboarding
+          and documentation initiative.
+        </p>
+
+        <div className="nsb-card-grid">
+          <FeatureCard
+            title="Get Started"
+            description="Install NSB and verify your environment."
+            to="/get-started"
+          />
+
+          <FeatureCard
+            title="Quickstart"
+            description="Run your first NSB workflow."
+            to="/quickstart"
+          />
+
+          <FeatureCard
+            title="Documentation"
+            description="Explore architecture and configuration."
+            to="/documentation"
+          />
+        </div>
+      </SectionContainer>
+
     </Layout>
   );
 }

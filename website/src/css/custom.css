@@ -172,3 +172,63 @@ main {
   max-width: var(--nsb-reading-width);
   margin: 0 auto;
 }
+
+.nsb-card {
+  display: block;
+  color: inherit;
+  cursor: pointer;
+  background: var(--nsb-card-bg);
+  border: 1px solid var(--nsb-border);
+  border-radius: var(--nsb-radius-lg);
+  padding: var(--nsb-space-md);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.nsb-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.nsb-card-title {
+  margin-bottom: 0.75rem;
+}
+
+.nsb-card-description {
+  margin-bottom: 0;
+}
+
+.nsb-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--nsb-space-md);
+  margin-top: var(--nsb-space-lg);
+}
+
+.nsb-page-header {
+  margin-bottom: var(--nsb-space-lg);
+}
+
+.nsb-page-description {
+  max-width: var(--nsb-reading-width);
+  font-size: var(--nsb-font-size-lg);
+}
+
+.nsb-callout {
+  background: var(--nsb-card-bg);
+  border: 1px solid var(--nsb-border);
+  border-radius: var(--nsb-radius-lg);
+  padding: var(--nsb-space-md);
+}
+
+.nsb-callout-title {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.nsb-callout-content > *:last-child {
+  margin-bottom: 0;
+}
