@@ -137,3 +137,38 @@ a:hover {
 code {
   font-size: 0.92em;
 }
+
+.container {
+  max-width: var(--nsb-content-width);
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+article {
+  max-width: var(--nsb-reading-width);
+  margin: 0 auto;
+}
+
+main {
+  width: 100%;
+  padding-top: var(--nsb-space-lg);
+  padding-bottom: var(--nsb-space-xl);
+}
+
+.nsb-section {
+  padding-top: var(--nsb-space-xl);
+  padding-bottom: var(--nsb-space-xl);
+}
+
+.nsb-content {
+  max-width: var(--nsb-content-width);
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.nsb-reading {
+  max-width: var(--nsb-reading-width);
+  margin: 0 auto;
+}
