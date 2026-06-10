@@ -22,6 +22,20 @@
 
   --nsb-max-width: 1200px;
 
+  --nsb-content-width: 1200px;
+  --nsb-reading-width: 760px;
+
+  --nsb-font-size-sm: 0.875rem;
+  --nsb-font-size-base: 1rem;
+  --nsb-font-size-lg: 1.125rem;
+
+  --nsb-font-size-h1: 3rem;
+  --nsb-font-size-h2: 2.25rem;
+  --nsb-font-size-h3: 1.5rem;
+
+  --nsb-line-height-body: 1.7;
+  --nsb-line-height-heading: 1.2;
+
   --nsb-space-xs: 0.5rem;
   --nsb-space-sm: 1rem;
   --nsb-space-md: 2rem;
@@ -65,4 +79,61 @@
   --ifm-font-color-base: var(--nsb-text-primary);
 
   --docusaurus-highlighted-code-line-bg: rgba(78, 168, 222, 0.12);
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-size: var(--nsb-font-size-base);
+  line-height: var(--nsb-line-height-body);
+  color: var(--nsb-text-primary);
+}
+
+p {
+  color: var(--nsb-text-secondary);
+  line-height: var(--nsb-line-height-body);
+  margin-bottom: 1.25rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--nsb-text-primary);
+  line-height: var(--nsb-line-height-heading);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 5vw, var(--nsb-font-size-h1));
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 4vw, var(--nsb-font-size-h2));
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: var(--nsb-font-size-h3);
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+a {
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+code {
+  font-size: 0.92em;
 }
