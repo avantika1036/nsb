@@ -2,6 +2,9 @@ import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import { themes as prismThemes } from 'prism-react-renderer';
 
+const BASE_URL = '/nsb/';
+const LOGO_URL = `${BASE_URL}img/nsb-logo.png`;
+
 const config: Config = {
   title: 'NSB',
   tagline: 'Network Simulation Bridge — Bridge Your App to Any Network Simulator',
@@ -132,7 +135,7 @@ const config: Config = {
                   <div class="footer-brand-header">
                     <div class="footer-brand-logo-wrap">
                       <img
-                        src="/img/nsb-logo.png"
+                        src="${LOGO_URL}"
                         alt="NSB"
                         class="footer-brand-logo"
                       />
