@@ -8,7 +8,6 @@ sidebar_position: 2
 NSB2 was engineered around four core properties. These goals shaped every architectural decision described throughout this documentation — from the multi-channel transport to the modular abstraction layers.
 
 
-
 ## The Four Properties
 
 ### Lightweight
@@ -24,11 +23,9 @@ Provides well-defined interfaces and abstractions that users and contributors ca
 Both endpoint libraries expose small, consistent APIs — socket-like `send`/`receive` on the application side, HTTP-like `fetch`/`post` on the simulator side — implemented with full feature parity across Python and C++.
 
 
-
 ## What NSB2 Is Not
 
 NSB2 does **not** re-implement network logic. It does not simulate any network behavior. It is a **relay pipeline** — it moves payloads between a native application and a network simulator so that the simulator can model how those payloads travel.
-
 
 
 ## NSB2 vs. NSB (Prior Version)
@@ -46,7 +43,6 @@ NSB2 is a **complete redesign and re-implementation** of the original Network Si
 | Language support | Limited | Full Python and C++ feature parity |
 | Protobuf schema | None | Single `.proto` schema for both languages |
 | Package installation | Manual | CMake + pkg-config |
-
 
 
 ## Specific Improvements in NSB2
@@ -70,7 +66,6 @@ The prior version had a fixed, tightly-integrated technology stack. NSB2 exposes
 - Full Python and C++ feature parity through a single Protobuf schema
 - Mature CMake package installation and pkg-config registration
 - Removal of unnecessary communication round-trips
-
 
 
 ## Next Steps
