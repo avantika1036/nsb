@@ -7,9 +7,9 @@ const config: Config = {
   tagline: 'Network Simulation Bridge — Bridge Your App to Any Network Simulator',
   favicon: 'img/nsb-logo.png',
   url: 'https://nsb-ucsc.github.io',
-  baseUrl: '/',
+  baseUrl: '/nsb/',
   organizationName: 'nsb-ucsc',
-  projectName: 'nsb_beta',
+  projectName: 'nsb',
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
   i18n: {

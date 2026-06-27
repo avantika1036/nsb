@@ -11,10 +11,6 @@
    followed by a trimmed quickstart-only.css instead.
    ════════════════════════════════════════════════════════════════ */
 
-/* ════════════════════════════════════════════════════════════════
-   GET STARTED PAGE (src/pages/get-started.tsx)
-   ════════════════════════════════════════════════════════════════ */
-
 .gs-page {
   max-width: 1200px;
   margin: 0 auto;
