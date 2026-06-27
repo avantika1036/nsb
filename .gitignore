@@ -5,6 +5,8 @@
 build/*
 cpp/rabbit/build/*
 */docs/
+*/docs/
+!website/docs/
 __pycache__
 *_pb2.py
 *.pb.cc
