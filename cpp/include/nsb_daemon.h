@@ -108,20 +108,22 @@ namespace nsb {
         std::map<std::string, int> fd_lookup;
         /**
          * @brief Transmission buffer to store sent payloads waiting to be fetched.
-         * 
+         * Keyed by source client ID for O(1) lookup in handle_fetch().
+         *
          * @see MessageEntry
          * @see handle_send()
          * @see handle_fetch()
          */
-        std::list<MessageEntry> tx_buffer;
+        std::unordered_map<std::string, std::list<MessageEntry>> tx_buffer;
         /**
          * @brief Reception buffer to store posted payloads waiting to be received.
-         * 
+         * Keyed by destination client ID for O(1) lookup in handle_receive().
+         *
          * @see MessageEntry
          * @see handle_post()
          * @see handle_receive()
          */
-        std::list<MessageEntry> rx_buffer;
+        std::unordered_map<std::string, std::list<MessageEntry>> rx_buffer;
 
         /* PRIVATE LAMBDAS */
 
