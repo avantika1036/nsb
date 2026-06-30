@@ -1,0 +1,734 @@
+/* ════════════════════════════════════════════════════════════════
+   BASE.CSS — Shared global styles
+   Import this on EVERY page (theme tokens, fonts, navbar, footer,
+   TOC, scrollbar, animations used across all pages).
+   In Docusaurus: keep this as src/css/custom.css (always loaded).
+   ════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ─── NSB Brand Colors (Light) — Website 1 palette ─── */
+:root {
+  /* Primary accent: strong blue */
+  --ifm-color-primary:          hsl(217 91% 50%);
+  --ifm-color-primary-dark:     hsl(217 91% 44%);
+  --ifm-color-primary-darker:   hsl(217 91% 40%);
+  --ifm-color-primary-darkest:  hsl(217 91% 33%);
+  --ifm-color-primary-light:    hsl(217 91% 56%);
+  --ifm-color-primary-lighter:  hsl(213 85% 62%);
+  --ifm-color-primary-lightest: hsl(210 85% 72%);
+
+  --ifm-code-font-size: 88%;
+  --ifm-font-family-base:        'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --ifm-font-family-monospace:   'JetBrains Mono', ui-monospace, 'Courier New', monospace;
+  --ifm-heading-font-family:     'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --ifm-navbar-height: 60px;
+
+  /* NSB semantic tokens (light) */
+  --nsb-gold:     hsl(43 85% 42%);
+  --nsb-gold-bg:  hsl(43 85% 42% / 0.09);
+  --nsb-blue:     hsl(217 91% 50%);
+  --nsb-blue-dim: hsl(217 91% 50% / 0.08);
+  --nsb-blue-mid: hsl(217 91% 50% / 0.20);
+
+  --docusaurus-highlighted-code-line-bg: rgba(0,0,0,0.08);
+
+  /* Surface palette */
+  --bg:      hsl(220 30% 98%);
+  --bg2:     hsl(220 25% 95%);
+  --bg3:     hsl(0 0% 100%);
+  --border:  hsl(220 20% 88%);
+  --border2: hsl(220 20% 78%);
+
+  /* Text */
+  --text:  hsl(220 50% 12%);
+  --text2: hsl(220 20% 35%);
+  --text3: hsl(220 15% 52%);
+  --text4: hsl(220 10% 68%);
+
+  /* Code block bg */
+  --ifm-code-background: hsl(220 35% 96%);
+  --ifm-toc-border-color: hsl(220 20% 88%);
+}
+
+/* ─── NSB Brand Colors (Dark) — Website 1 deep navy palette ─── */
+[data-theme='dark'] {
+  --ifm-color-primary:          hsl(217 90% 62%);
+  --ifm-color-primary-dark:     hsl(217 90% 55%);
+  --ifm-color-primary-darker:   hsl(217 90% 50%);
+  --ifm-color-primary-darkest:  hsl(217 90% 42%);
+  --ifm-color-primary-light:    hsl(213 85% 68%);
+  --ifm-color-primary-lighter:  hsl(210 85% 72%);
+  --ifm-color-primary-lightest: hsl(210 85% 80%);
+
+  /* Deep layered navy — same as W1 */
+  --ifm-background-color:         hsl(220 65% 5%);
+  --ifm-background-surface-color: hsl(220 58% 9%);
+  --ifm-navbar-background-color:  hsl(220 65% 5% / 0.94);
+  --ifm-footer-background-color:  hsl(220 58% 9%);
+  --ifm-code-background:          hsl(220 60% 7%);
+  --ifm-toc-border-color:         hsl(220 35% 22%);
+  --ifm-hr-border-color:          hsl(220 35% 22%);
+
+  /* NSB tokens (dark) */
+  --nsb-gold:     hsl(43 95% 60%);
+  --nsb-gold-bg:  hsl(43 95% 60% / 0.12);
+  --nsb-blue:     hsl(217 90% 62%);
+  --nsb-blue-dim: hsl(217 90% 62% / 0.08);
+  --nsb-blue-mid: hsl(217 90% 62% / 0.20);
+
+  --docusaurus-highlighted-code-line-bg: rgba(255,255,255,0.05);
+
+  /* Surface palette */
+  --bg:      hsl(220 65% 5%);
+  --bg2:     hsl(220 58% 9%);
+  --bg3:     hsl(220 52% 13%);
+  --border:  hsl(220 35% 22%);
+  --border2: hsl(220 30% 30%);
+
+  /* Text */
+  --text:  hsl(220 60% 97%);
+  --text2: hsl(220 25% 72%);
+  --text3: hsl(220 18% 55%);
+  --text4: hsl(220 12% 38%);
+}
+
+/* ─── Animations ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 hsl(217 90% 62% / 0.4); }
+  50%       { opacity: 0.7; box-shadow: 0 0 0 6px hsl(217 90% 62% / 0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+@keyframes float-diagram {
+  0%, 100% {
+    transform: translateY(0px);
+    filter: drop-shadow(0 12px 40px hsl(217 90% 62% / 0.25));
+  }
+  50% {
+    transform: translateY(-16px);
+    filter: drop-shadow(0 28px 50px hsl(217 90% 62% / 0.35));
+  }
+}
+@keyframes journey-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(217 90% 62% / 0.3); }
+  50%       { box-shadow: 0 0 0 8px hsl(217 90% 62% / 0); }
+}
+@keyframes flow {
+  0% { opacity:.4; }
+  50% { opacity:1; }
+  100% { opacity:.4; }
+}
+
+.animate-fade-up    { animation: fadeInUp   0.6s ease forwards; }
+.animate-fade-left  { animation: fadeInLeft  0.5s ease forwards; }
+.animate-fade-right { animation: fadeInRight 0.5s ease forwards; }
+.animate-delay-1    { animation-delay: 0.10s; opacity: 0; }
+.animate-delay-2    { animation-delay: 0.20s; opacity: 0; }
+.animate-delay-3    { animation-delay: 0.30s; opacity: 0; }
+.animate-delay-4    { animation-delay: 0.45s; opacity: 0; }
+.animate-delay-5    { animation-delay: 0.60s; opacity: 0; }
+
+/* ─── Typography ─── */
+body {
+  font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.65;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+}
+code, pre, .prism-code {
+  font-family: 'JetBrains Mono', ui-monospace, 'Courier New', monospace !important;
+}
+::selection {
+  background: hsl(217 90% 62% / 0.20);
+  color: var(--text);
+}
+
+/* ─── Scrollbar — W1 style ─── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--nsb-blue); }
+
+/* ─── Navbar ─── */
+.navbar {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  background: var(--ifm-navbar-background-color);
+}
+[data-theme='dark'] .navbar {
+  border-bottom: 1px solid hsl(220 35% 22%);
+  box-shadow: none;
+}
+.navbar__title {
+  display: flex;
+  flex-direction: column;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 700;
+  color: var(--nsb-gold) !important;
+  font-size: 15px;
+  line-height: 1.05;
+  overflow: visible;
+}
+
+.navbar__title::after {
+  content: "Network Simulation Bridge";
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-600);
+  margin-top: 1px;
+  white-space: nowrap;
+  letter-spacing: 0.2px;
+}
+
+.navbar__brand {
+  gap: 10px;
+}
+.navbar-cta {
+  background: linear-gradient(135deg, hsl(217 91% 50%), hsl(217 85% 45%)) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  padding: 7px 16px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  box-shadow: 0 1px 3px hsl(217 91% 50% / 0.4), 0 4px 12px hsl(217 91% 50% / 0.15) !important;
+  transition: filter 0.2s, box-shadow 0.2s, transform 0.15s !important;
+  margin-left: 8px;
+}
+.navbar-cta:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 2px 8px hsl(217 91% 50% / 0.5), 0 8px 24px hsl(217 91% 50% / 0.2) !important;
+  transform: translateY(-1px);
+}
+.navbar-github-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--bg2);
+  color: var(--text1) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  padding: 7px 14px !important;
+  border-radius: 8px !important;
+  text-decoration: none !important;
+  border: 1px solid var(--border2) !important;
+  transition: filter 0.2s, box-shadow 0.2s, transform 0.15s !important;
+}
+[data-theme='light'] .navbar-github-pill {
+  color: rgb(3, 38, 115) !important;
+}
+.navbar-github-pill:hover {
+  background: var(--bg3);
+  filter: brightness(1.05) !important;
+  transform: translateY(-1px) !important;
+  text-decoration: none !important;
+}
+@media (min-width: 997px) {
+  .navbar__search-input {
+    width: 320px !important;
+  }
+}
+
+/* ─── Sidebar ─── */
+.theme-doc-sidebar-menu { font-size: 13px; }
+.menu__link {
+  font-size: 13px;
+  border-radius: 6px;
+  transition: background 0.12s, color 0.12s;
+}
+.menu__link--active { font-weight: 600; }
+.menu__list-item-collapsible { border-radius: 6px; }
+.menu__caret::before { transition: transform 0.2s; }
+.menu__list-item-collapsible > .menu__link--sublist-caret {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text4);
+}
+
+/* ─── TOC ─── */
+.table-of-contents {
+  border-left: 2px solid var(--ifm-toc-border-color) !important;
+  padding-left: 14px !important;
+}
+.table-of-contents__link {
+  font-size: 12.5px;
+  color: var(--text3);
+  transition: color 0.15s;
+}
+.table-of-contents__link:hover,
+.table-of-contents__link--active {
+  color: var(--nsb-blue);
+  font-weight: 600;
+}
+
+/* ─── Code Blocks — W1 card feel ─── */
+.prism-code {
+  font-size: 13px;
+  line-height: 1.6;
+}
+div[class*="codeBlockContainer"] {
+  border-radius: 10px;
+  overflow: hidden;
+}
+[data-theme='dark'] div[class*="codeBlockContainer"] {
+  border: 1px solid hsl(220 35% 22%);
+  box-shadow: 0 0 0 1px hsl(217 90% 62% / 0.06), 0 8px 24px hsl(220 65% 5% / 0.5);
+}
+[data-theme='light'] div[class*="codeBlockContainer"] {
+  border: 1px solid hsl(220 20% 88%);
+  box-shadow: 0 2px 8px hsl(220 50% 12% / 0.06);
+}
+
+/* ─── Inline code — W1 gold tint ─── */
+[data-theme='dark'] code:not([class*="language"]) {
+  background: hsl(220 60% 7%);
+  border: 1px solid hsl(220 35% 22%);
+  color: hsl(43 95% 60%);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+[data-theme='light'] code:not([class*="language"]) {
+  background: hsl(217 91% 50% / 0.07);
+  border: 1px solid hsl(217 91% 50% / 0.2);
+  color: hsl(217 91% 35%);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+/* ─── Tables ─── */
+table { font-size: 13px; }
+[data-theme='dark'] table th  { background: hsl(220 52% 13%); }
+[data-theme='dark'] table tr:nth-child(2n) { background: hsl(220 58% 9%); }
+[data-theme='light'] table th { background: hsl(220 25% 95%); }
+
+/* ─── Footer ─── */
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  position: relative;
+  overflow: hidden;
+
+  border-top: 1px solid var(--border);
+
+  padding: 36px 64px 14px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(220 45% 22% / 0.35) 50%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      180deg,
+      hsl(220 18% 11%) 0%,
+      hsl(220 16% 8%) 100%
+    );
+
+  --ifm-footer-color: var(--text2);
+  --ifm-footer-link-color: var(--text2);
+  --ifm-footer-link-hover-color: var(--nsb-blue);
+  --ifm-footer-title-color: var(--nsb-gold);
+}
+
+/* subtle glow */
+
+.footer::before {
+  content: "";
+  display: none;
+  position: absolute;
+
+  top: -180px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 900px;
+  height: 360px;
+
+  background:
+    radial-gradient(
+      circle,
+      var(--nsb-blue-mid),
+      transparent 70%
+    );
+
+  pointer-events: none;
+}
+
+.footer .container {
+  max-width: 1320px;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.footer .row {
+  display: grid !important;
+
+  grid-template-columns:
+    minmax(320px, 2.4fr)
+    1fr
+    1fr
+    1fr;
+
+  gap: 64px;
+
+  margin-bottom: 22px;
+}
+
+.footer .col {
+  padding: 0;
+  flex: unset;
+  max-width: none;
+}
+
+/* remove docusaurus footer logo */
+
+.footer__bottom img,
+.footer__bottom .footer__logo {
+  display: none !important;
+}
+
+/* =========================================================
+   BRAND
+========================================================= */
+
+.footer-brand {
+  max-width: 380px;
+}
+
+.footer-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  margin-bottom: 18px;
+}
+
+.footer-brand-logo-wrap {
+  width: 56px;
+  height: 56px;
+
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--bg3),
+      var(--bg2)
+    );
+
+  border: 1px solid var(--nsb-blue-mid);
+
+  box-shadow:
+    0 0 20px var(--nsb-blue-dim);
+}
+
+.footer-brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.footer-brand-title {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+
+  color: var(--text);
+}
+
+.footer-brand-subtitle {
+  margin-top: 4px;
+
+  font-size: 13px;
+
+  font-family: "JetBrains Mono", monospace;
+
+  color: var(--text3);
+}
+
+.footer-blurb {
+  margin: 0 0 20px;
+
+  font-size: 15px;
+  line-height: 1.8;
+
+  color: var(--text2);
+
+  max-width: 340px;
+}
+
+/* =========================================================
+   GITHUB LINK
+========================================================= */
+
+.footer-brand-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--nsb-blue);
+
+  font-size: 15px;
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: all .2s ease;
+}
+
+.footer-brand-github svg {
+  width: 18px;
+  height: 18px;
+}
+
+.footer-brand-github:hover {
+  color: var(--text);
+  text-decoration: none;
+
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   HEADINGS
+========================================================= */
+
+.footer__title {
+  font-family: "JetBrains Mono", monospace;
+
+  text-transform: uppercase;
+
+  letter-spacing: 3px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: var(--nsb-gold) !important;
+
+  margin-bottom: 22px;
+}
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+.footer__item {
+  margin-bottom: 14px;
+}
+
+.footer__link-item {
+  font-size: 15px;
+
+  color: var(--text2) !important;
+
+  transition:
+    color .2s ease,
+    transform .2s ease;
+}
+
+.footer__link-item:hover {
+  color: var(--nsb-blue) !important;
+
+  text-decoration: none;
+
+  transform: translateX(2px);
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.footer__bottom {
+  border-top: 1px solid var(--border);
+
+  padding-top: 14px;
+}
+
+/* =========================================================
+   COPYRIGHT
+========================================================= */
+
+.footer__copyright {
+  font-size: 12px;
+
+  color: var(--text3);
+
+  text-align: center;
+}
+
+/* =========================================================
+   LIGHT MODE POLISH
+========================================================= */
+
+[data-theme='light'] .footer {
+  background:
+    radial-gradient(
+      ellipse at center top,
+      hsl(220 8% 89%) 0%,
+      transparent 80%
+    ),
+
+    linear-gradient(
+      180deg,
+      hsl(220 12% 94%) 0%,
+      hsl(220 12% 91%) 100%
+    );
+
+  border-top: 1px solid hsl(220 18% 84%);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 996px) {
+
+  .footer {
+    padding: 28px 24px 12px;
+  }
+
+  .footer .row {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-brand {
+    max-width: none;
+  }
+
+  .footer-brand-title {
+    font-size: 24px;
+  }
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+.footer__items {
+  margin: 0;
+}
+
+.footer__item {
+  margin: 0;
+}
+
+.footer__link-item {
+  display: inline-block;
+
+  padding: 6px 0;
+
+  color: hsl(220 22% 70%);
+
+  font-size: 15px;
+
+  transition:
+    color .2s ease,
+    transform .2s ease;
+}
+
+.footer__link-item:hover {
+  color: white;
+
+  transform: translateX(3px);
+
+  text-decoration: none;
+}
+
+/* =========================================================
+   BOTTOM BAR
+========================================================= */
+
+.footer__bottom {
+  border-top: 1px solid hsl(220 35% 22%);
+
+  padding-top: 14px;
+
+  margin-top: 10px;
+}
+
+.footer__copyright {
+  color: hsl(220 12% 50%);
+
+  font-size: 13px;
+
+  text-align: center;
+
+  line-height: 1.7;
+}
+
+/* hide default docusaurus footer logo */
+.footer__logo {
+  display: none;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 996px) {
+  .footer {
+    padding: 42px 28px 20px;
+  }
+
+  .footer .row {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer .row {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-brand-logo-wrap {
+    width: 50px;
+    height: 50px;
+  }
+
+  .footer-brand-title {
+    font-size: 24px;
+  }
+
+  .footer-brand-subtitle {
+    font-size: 12px;
+  }
+}
