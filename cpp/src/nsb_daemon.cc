@@ -183,13 +183,15 @@ namespace nsb {
 
     void NSBDaemon::handle_message(int fd, std::vector<char> message) {
         nsb::nsbm nsb_message;
-        nsb_message.ParseFromArray(message.data(), message.size());
+        if (!nsb_message.ParseFromArray(message.data(), message.size())) {
+            LOG(WARNING) << "ParseFromArray failed for nsb_message";
+        };
         nsb::nsbm::Manifest manifest = nsb_message.manifest();
         DLOG(INFO) << "Manifest " << nsb::nsbm::Manifest::Operation_Name(manifest.op()) << "<--" 
                    << nsb::nsbm::Manifest::Originator_Name(manifest.og())
                    << " received from FD " << fd << "." << std::endl;
         // Get message fields.
-        nsb::nsbm::Metadata metadata = nsb_message.metadata();
+        //nsb::nsbm::Metadata metadata = nsb_message.metadata();
         // Prepare template for response.
         nsb::nsbm nsb_response;
         nsb::nsbm::Manifest* r_manifest = nsb_response.mutable_manifest();
@@ -231,7 +233,9 @@ namespace nsb {
         if (response_required) {
             std::size_t size = nsb_response.ByteSizeLong();
             void* r_buffer = malloc(size);
-            nsb_response.SerializeToArray(r_buffer, size);
+            if (!nsb_response.SerializeToArray(r_buffer, size)) {
+                LOG(WARNING) << "SerializeToArray failed for nsb_response";
+            }
             DLOG(INFO) << "Sending response back: (" << size << "B) " << r_buffer << std::endl;
             send(fd, r_buffer, size, 0);
         }
@@ -321,8 +325,8 @@ namespace nsb {
                 << msg_entry.source << " | dest: " 
                 << msg_entry.destination << std::endl;
             DLOG(INFO) << (cfg.USE_DB ? "\tPayload ID: ": "\tPayload: ") << msg_entry.payload_obj << std::endl;
-            // Add it to the buffer.
-            tx_buffer.push_back(msg_entry);
+            // Add it to the per-source queue.
+            tx_buffer[msg_entry.source].push_back(msg_entry);
         } else if (cfg.SYSTEM_MODE == Config::SystemMode::PUSH) {
             LOG(INFO).NoPrefix() << "PUSH mode..." << std::endl;
             // Copy the incoming message to the outgoing message, replacing with SEND to FORWARD.
@@ -354,7 +358,9 @@ namespace nsb {
                     // Serialize the message and send it to the sim RECV channel.
                     std::size_t size = outgoing_msg->ByteSizeLong();
                     void* buffer = malloc(size);
-                    outgoing_msg->SerializeToArray(buffer, size);
+                    if (!outgoing_msg->SerializeToArray(buffer, size)) {
+                        LOG(WARNING) << "SerializeToArray failed for outgoing_msg";
+                    }
                     send(target_sim.ch_RECV_fd, buffer, size, 0);
                     DLOG(INFO) << "\tForwarded message to sim RECV channel (" << size << " B)" << std::endl;
                     free(buffer);
@@ -373,18 +379,19 @@ namespace nsb {
         if (incoming_msg->has_metadata()) {
             nsb::nsbm::Metadata in_metadata = incoming_msg->metadata();
             if (in_metadata.has_src_id()) {
-                // Search for the message in the buffer.
-                auto it = std::find_if(tx_buffer.begin(), tx_buffer.end(),
-                          [&](const auto& msg) { return msg.source == in_metadata.src_id(); });
-                if (it != tx_buffer.end()) {
-                    fetched_message = *it;
-                    tx_buffer.erase(it);
+                auto it = tx_buffer.find(in_metadata.src_id());
+                if (it != tx_buffer.end() && !it->second.empty()) {
+                    fetched_message = it->second.front();
+                    it->second.pop_front();
                 }
             } else {
-                // If source not specified, pop the next message in the queue.
-                if (!tx_buffer.empty()) {
-                    fetched_message = tx_buffer.front();
-                    tx_buffer.pop_front();
+                // If source not specified, pop from the first non-empty queue.
+                for (auto& [key, queue] : tx_buffer) {
+                    if (!queue.empty()) {
+                        fetched_message = queue.front();
+                        queue.pop_front();
+                        break;
+                    }
                 }
             }
         }
@@ -440,7 +447,8 @@ namespace nsb {
                         << msg_entry.source << " | dest: " 
                         << msg_entry.destination << "\n\tPayload: " 
                         << msg_entry.payload_obj << std::endl;
-                rx_buffer.push_back(msg_entry);
+                // Add it to the per-destination queue.
+                rx_buffer[msg_entry.destination].push_back(msg_entry);
             }
         } else if (cfg.SYSTEM_MODE == Config::SystemMode::PUSH) {
             LOG(INFO).NoPrefix() << "PUSH mode..." << std::endl;
@@ -466,7 +474,9 @@ namespace nsb {
                         // Serialize the message and send it to the target RECV channel.
                         std::size_t size = outgoing_msg->ByteSizeLong();
                         void* buffer = malloc(size);
-                        outgoing_msg->SerializeToArray(buffer, size);
+                        if (!outgoing_msg->SerializeToArray(buffer, size)) {
+                            LOG(WARNING) << "SerializeToArray failed for outgoing_msg";
+                        }
                         send(target_fd, buffer, size, 0);
                         DLOG(INFO) << "\tForwarded message to " 
                                 << dest_id << " RECV channel (" 
@@ -491,18 +501,19 @@ namespace nsb {
         if (incoming_msg->has_metadata()) {
             nsb::nsbm::Metadata in_metadata = incoming_msg->metadata();
             if (in_metadata.has_dest_id()) {
-                // Search for the message in the buffer.
-                auto it = std::find_if(rx_buffer.begin(), rx_buffer.end(),
-                          [&](const auto& msg) { return msg.destination == in_metadata.dest_id(); });
-                if (it != rx_buffer.end()) {
-                    received_message = *it;
-                    rx_buffer.erase(it);
+                auto it = rx_buffer.find(in_metadata.dest_id());
+                if (it != rx_buffer.end() && !it->second.empty()) {
+                    received_message = it->second.front();
+                    it->second.pop_front();
                 }
             } else {
-                // If destination not specified, pop the next message in the queue.
-                if (!rx_buffer.empty()) {
-                    received_message = rx_buffer.front();
-                    rx_buffer.pop_front();
+                // If destination not specified, pop from the first non-empty queue.
+                for (auto& [key, queue] : rx_buffer) {
+                    if (!queue.empty()) {
+                        received_message = queue.front();
+                        queue.pop_front();
+                        break;
+                    }
                 }
             }
         }
