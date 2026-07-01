@@ -13,6 +13,7 @@ __pycache__
 *.pb.h
 .vscode/settings.json
 protobuf*
+!website/docs/protocol/protobuf*.md
 abseil-cpp
 yaml-cpp
 install
