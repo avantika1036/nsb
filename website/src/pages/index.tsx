@@ -3,100 +3,6 @@ import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import "../css/index.css";
 
-const IconBridge = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M4 5c0 0 0 5 8 5s8-5 8-5" />
-    <path d="M2 10h20" />
-    <path d="M4 10v8" />
-    <path d="M20 10v8" />
-    <path d="M10 18v-4" />
-    <path d="M14 18v-4" />
-  </svg>
-);
-const IconCode = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="16 18 22 12 16 6" />
-    <polyline points="8 6 2 12 8 18" />
-  </svg>
-);
-const IconLayers = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polygon points="12 2 2 7 12 12 22 7 12 2" />
-    <polyline points="2 17 12 22 22 17" />
-    <polyline points="2 12 12 17 22 12" />
-  </svg>
-);
-const IconDB = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <ellipse cx="12" cy="5" rx="9" ry="3" />
-    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-  </svg>
-);
-const IconZap = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-  </svg>
-);
-const IconShield = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-  </svg>
-);
 const IconArrow = () => (
   <svg
     width="16"
@@ -112,16 +18,24 @@ const IconArrow = () => (
     <polyline points="12 5 19 12 12 19" />
   </svg>
 );
-const IconPlay = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="5 3 19 12 5 21 5 3" />
-  </svg>
-);
 const IconGitHub = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.983-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
   </svg>
 );
+<defs>
+  <marker
+    id="arrow-down"
+    markerWidth="10"
+    markerHeight="10"
+    refX="5"
+    refY="5"
+    orient="auto"
+    markerUnits="strokeWidth"
+  >
+    <path d="M0,0 L10,5 L0,10 Z" fill="#6b8cff" />
+  </marker>
+</defs>
 
 const terminalSteps = [
   {
@@ -287,241 +201,150 @@ function AnimatedTerminal() {
   );
 }
 
-const ArchitectureDiagram = () => (
+const ConceptualDiagram = () => (
   <svg
-    className="nsb-arch-diagram"
-    viewBox="0 0 360 430"
+    className="nsb-conceptual-diagram"
+    viewBox="0 0 600 620"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
   >
-    
     <defs>
-      <filter id="glow-blue" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
+      <filter id="glow-blue" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="4" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
       </filter>
-      <filter id="glow-gold" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="8" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
+      <filter id="glow-gold" x="-40%" y="-40%" width="180%" height="180%">
+        <feGaussianBlur stdDeviation="6" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
       </filter>
+
+      <radialGradient id="particle-blue" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="hsl(217,90%,70%)" stopOpacity="1" />
+        <stop offset="100%" stopColor="hsl(217,90%,62%)" stopOpacity="0" />
+      </radialGradient>
+      <radialGradient id="particle-gold" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="hsl(43,95%,65%)" stopOpacity="1" />
+        <stop offset="100%" stopColor="hsl(43,95%,55%)" stopOpacity="0" />
+      </radialGradient>
+
+      {/* Particle motion paths — matched to actual connectors */}
+      <path id="path-appL" d="M192.5 140 L192.5 170 L260 170 L260 200" />
+      <path id="path-appR" d="M422.5 140 L422.5 170 L340 170 L340 200" />
+      <path id="path-node1" d="M300 290 L300 370 L230 370 L230 400" />
+      <path id="path-node2" d="M300 290 L300 370 L370 370 L370 400" />
+
     </defs>
 
-    {/* Application Layer */}
-    <rect
-      className="arch-box-app arch-blue-glow"
-      x="20"
-      y="20"
-      width="320"
-      height="88"
-      rx="10"
-    />
-    <text
-      className="arch-label"
-      x="180"
-      y="50"
-      textAnchor="middle"
-      letterSpacing="2"
-    >
-      APPLICATION LAYER
-    </text>
-    <text className="arch-main-text" x="180" y="70" textAnchor="middle">
-      NSBAppClient (Python or C++)
-    </text>
-    <text className="arch-method" x="95" y="92" textAnchor="middle">
-      send()
-    </text>
-    <text className="arch-method" x="265" y="92" textAnchor="middle">
-      receive()
+    {/* Title */}
+    <text x="300" y="30" textAnchor="middle" className="cd-label" style={{ fontSize: "12px" }}>
+      DEVELOPING APPLICATIONS
     </text>
 
-    {/* Connector down */}
-    <line className="arch-connector" x1="180" y1="108" x2="180" y2="158" />
-    <polygon className="arch-arrow" points="174,152 180,165 186,152" />
-    <text className="arch-conn-label" x="198" y="138">
-      TCP / RabbitMQ
+    {/* App box — left */}
+    <rect x="130" y="60" width="125" height="80" rx="10" className="cd-node-app" />
+    <text x="192.5" y="90" textAnchor="middle" className="cd-node-text">APP</text>
+    <text x="192.5" y="118" textAnchor="middle" className="cd-node-text" style={{ fontSize: "13px" }}>
+      Python
+      <animate attributeName="opacity"
+        values="0;1;1;0;0"
+        keyTimes="0;0.05;0.45;0.5;1"
+        dur="6s" repeatCount="indefinite" />
+    </text>
+    <text x="192.5" y="118" textAnchor="middle" className="cd-node-text" style={{ fontSize: "13px" }}>
+      C++
+      <animate attributeName="opacity"
+        values="0;0;1;1;0;0"
+        keyTimes="0;0.5;0.55;0.95;1;1"
+        dur="6s" repeatCount="indefinite" />
     </text>
 
-    {/* NSB Daemon */}
-    <rect
-      className="arch-box-daemon arch-gold-glow"
-      x="20"
-      y="165"
-      width="320"
-      height="98"
-      rx="10"
-    />
-    <text
-      className="arch-label arch-label-gold"
-      x="180"
-      y="196"
-      textAnchor="middle"
-      letterSpacing="3"
-    >
-      NSB DAEMON
+    {/* App box — right */}
+    <rect x="360" y="60" width="125" height="80" rx="10" className="cd-node-app" />
+    <text x="422.5" y="90" textAnchor="middle" className="cd-node-text">APP</text>
+    <text x="422.5" y="118" textAnchor="middle" className="cd-node-text" style={{ fontSize: "13px" }}>
+      Python
+      <animate attributeName="opacity"
+        values="0;1;1;0;0"
+        keyTimes="0;0.05;0.45;0.5;1"
+        dur="6s" repeatCount="indefinite" />
     </text>
-    <text
-      className="arch-main-text arch-main-text-gold"
-      x="180"
-      y="216"
-      textAnchor="middle"
-    >
-      Central broker — compiled from source
-    </text>
-    <rect
-      className="arch-badge-bg"
-      x="40"
-      y="228"
-      width="128"
-      height="22"
-      rx="4"
-    />
-    <text className="arch-badge-text" x="104" y="243" textAnchor="middle">
-      Routes payloads
-    </text>
-    <rect
-      className="arch-badge-bg"
-      x="192"
-      y="228"
-      width="128"
-      height="22"
-      rx="4"
-    />
-    <text className="arch-badge-text" x="256" y="243" textAnchor="middle">
-      Distributes config
+    <text x="422.5" y="118" textAnchor="middle" className="cd-node-text" style={{ fontSize: "13px" }}>
+      C++
+      <animate attributeName="opacity"
+        values="0;0;1;1;0;0"
+        keyTimes="0;0.5;0.55;0.95;1;1"
+        dur="6s" repeatCount="indefinite" />
     </text>
 
-    {/* Connector down */}
-    <line className="arch-connector" x1="180" y1="263" x2="180" y2="308" />
-    <polygon className="arch-arrow" points="174,302 180,315 186,302" />
-    <text className="arch-conn-label" x="198" y="290">
-      TCP / RabbitMQ
+    {/* App -> Bridge connectors */}
+    <path d="M192.5 140 L192.5 170 L260 170 L260 200" className="cd-connector-up" />
+    <path d="M422.5 140 L422.5 170 L340 170 L340 200" className="cd-connector-up" />
+
+
+    {/* NSB Bridge */}
+    <rect x="160" y="200" width="280" height="90" rx="12" className="cd-node-nsb" />
+    <text x="300" y="235" textAnchor="middle" className="cd-label-gold">NETWORK SIMULATION</text>
+    <text x="300" y="260" textAnchor="middle" className="cd-label-gold">BRIDGE</text>
+
+    {/* Bridge -> Nodes connectors */}
+    <path d="M300 290 L300 370 L230 370 L230 410" className="cd-connector-down" />
+    <path d="M300 290 L300 370 L370 370 L370 410" className="cd-connector-down" />
+
+    {/* Outer encapsulating box */}
+    <rect x="140" y="340" width="320" height="170" rx="14" className="cd-node-encapsulate" />
+
+    {/* Node boxes moved upward */}
+    <rect x="175" y="410" width="110" height="50" rx="10" className="cd-node-sim" />
+    <text x="230" y="440" textAnchor="middle" className="cd-node-text">NODE</text>
+
+    <rect x="315" y="410" width="110" height="50" rx="10" className="cd-node-sim" />
+    <text x="370" y="440" textAnchor="middle" className="cd-node-text">NODE</text>
+
+    {/* Rotating simulator labels shifted further down */}
+    <text x="300" y="490" textAnchor="middle" className="cd-label-gold" style={{ fontSize: "13px" }}>
+      ns-3
+      <animate attributeName="opacity"
+        values="0;1;1;0;0"
+        keyTimes="0;0.05;0.30;0.35;1"
+        dur="9s" repeatCount="indefinite" />
+    </text>
+    <text x="300" y="490" textAnchor="middle" className="cd-label-gold" style={{ fontSize: "13px" }}>
+      OMNeT++ / INET
+      <animate attributeName="opacity"
+        values="0;0;1;1;0;0"
+        keyTimes="0;0.35;0.40;0.65;0.70;1"
+        dur="9s" repeatCount="indefinite" />
+    </text>
+    <text x="300" y="490" textAnchor="middle" className="cd-label-gold" style={{ fontSize: "13px" }}>
+      Other Simulators
+      <animate attributeName="opacity"
+        values="0;0;0;1;1;0"
+        keyTimes="0;0.70;0.75;0.95;1;1"
+        dur="9s" repeatCount="indefinite" />
     </text>
 
-    {/* Simulator Layer */}
-    <rect
-      className="arch-box-sim arch-blue-glow"
-      x="20"
-      y="315"
-      width="320"
-      height="88"
-      rx="10"
-    />
-    <text
-      className="arch-label"
-      x="180"
-      y="345"
-      textAnchor="middle"
-      letterSpacing="2"
-    >
-      SIMULATOR LAYER
-    </text>
-    <text className="arch-main-text" x="180" y="365" textAnchor="middle">
-      NSBSimClient — embedded in simulator
-    </text>
-    <text className="arch-method" x="95" y="387" textAnchor="middle">
-      fetch()
-    </text>
-    <text className="arch-method" x="265" y="387" textAnchor="middle">
-      post()
+    {/* Bottom label */}
+    <text x="300" y="550" textAnchor="middle" className="cd-label" style={{ fontSize: "12px" }}>
+      NETWORK SIMULATOR
     </text>
 
-    {/* Redis note */}
-    <text className="arch-note" x="180" y="422" textAnchor="middle">
-      Optional: Redis payload storage beneath the Daemon
-    </text>
+
+    {/* Animated particles */}
+    <circle r="4" fill="url(#particle-blue)" filter="url(#glow-blue)">
+      <animateMotion dur="2.2s" repeatCount="indefinite" begin="0s"><mpath href="#path-appL" /></animateMotion>
+    </circle>
+    <circle r="4" fill="url(#particle-blue)" filter="url(#glow-blue)">
+      <animateMotion dur="2.4s" repeatCount="indefinite" begin="0.5s"><mpath href="#path-appR" /></animateMotion>
+    </circle>
+    <circle r="4" fill="url(#particle-gold)" filter="url(#glow-gold)">
+      <animateMotion dur="2.0s" repeatCount="indefinite" begin="0.2s"><mpath href="#path-node1" /></animateMotion>
+    </circle>
+    <circle r="4" fill="url(#particle-gold)" filter="url(#glow-gold)">
+      <animateMotion dur="2.1s" repeatCount="indefinite" begin="0.6s"><mpath href="#path-node2" /></animateMotion>
+    </circle>
   </svg>
 );
-
-const features = [
-  {
-    icon: <IconBridge />,
-    title: "Simulator Agnostic",
-    desc: "Supports ns-3, OMNeT++, and any simulator with a C++ or Python integration layer. No simulator modification required.",
-  },
-  {
-    icon: <IconZap />,
-    title: "Two Delivery Modes",
-    desc: "PULL polling or PUSH forwarding. System-Wide or Per-Node simulator mode — match your exact co-simulation topology.",
-  },
-  {
-    icon: <IconCode />,
-    title: "Python & C++ APIs",
-    desc: "Full-featured client libraries for both languages with identical interfaces, async support, and cross-language interoperability.",
-  },
-  {
-    icon: <IconDB />,
-    title: "Redis Payload Storage",
-    desc: "Optional Redis-backed payload storage for large messages beyond TCP buffer limits, with transparent key routing.",
-  },
-  {
-    icon: <IconLayers />,
-    title: "RabbitMQ Backend",
-    desc: "Swap the TCP daemon for a RabbitMQ broker for scalable, broker-native routing with priority queues and DLX support.",
-  },
-  {
-    icon: <IconShield />,
-    title: "Zero App Changes",
-    desc: "NSB acts as a transparent bridge. Your application code stays completely untouched — no refactoring required.",
-  },
-];
-
-const useCases = [
-  {
-    tag: "AV/V2X",
-    title: "Autonomous Vehicle Platooning",
-    desc: "Model V2V and V2X communication over realistic simulated radio channels without hardware.",
-  },
-  {
-    tag: "Federated ML",
-    title: "Federated Learning Networks",
-    desc: "Simulate network effects on federated learning convergence — latency, partitions, packet loss.",
-  },
-  {
-    tag: "SDN",
-    title: "SDN Protocol Testing",
-    desc: "Validate software-defined networking controllers and routing algorithms at scale, reproducibly.",
-  },
-  {
-    tag: "Education",
-    title: "Teaching Labs",
-    desc: "Give students a consistent network lab experience that runs on any laptop, no physical hardware.",
-  },
-];
-
-const messageSteps = [
-  {
-    n: "1",
-    title: "Application sends",
-    desc: "NSBAppClient.send(dest_id, payload) — fire-and-forget to the NSB Daemon.",
-  },
-  {
-    n: "2",
-    title: "Daemon stores & routes",
-    desc: "Daemon receives the payload (optionally storing in Redis) and routes it toward the simulator client.",
-  },
-  {
-    n: "3",
-    title: "Simulator fetches",
-    desc: "NSBSimClient.fetch() retrieves the payload, injects it into the simulated network topology.",
-  },
-  {
-    n: "4",
-    title: "Simulator posts back",
-    desc: "After the packet traverses the simulated network, post() notifies NSB of successful delivery.",
-  },
-  {
-    n: "5",
-    title: "Application receives",
-    desc: "NSBAppClient.receive() retrieves the delivered payload — transparent to the application.",
-  },
-];
 
 const journeySteps = [
   {
@@ -597,9 +420,9 @@ export default function Home() {
             </Link>
             <Link
               className="nsb-btn-secondary"
-              to="/quickstart"
+              to="/about"
             >
-              <IconPlay /> Quickstart — 5 min
+              About NSB
             </Link>
             <a
               className="nsb-btn-outline"
@@ -615,105 +438,7 @@ export default function Home() {
         </div>
 
         <div className="nsb-hero-right animate-fade-right animate-delay-2">
-          <ArchitectureDiagram />
-        </div>
-      </div>
-
-      {/* ── Features ── */}
-      <div className="nsb-features">
-        {features.map((f) => (
-          <div key={f.title} className="nsb-feat-card">
-            <div className="nsb-feat-icon">{f.icon}</div>
-            <div className="nsb-feat-title">{f.title}</div>
-            <div className="nsb-feat-desc">{f.desc}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── Use Cases ── */}
-      <div className="nsb-use-cases">
-        <div className="nsb-section-header">
-          <div className="nsb-section-label">Research Use Cases</div>
-          <div className="nsb-section-title">
-            Built for real research problems
-          </div>
-          <div className="nsb-section-sub">
-            NSB was created at UC Santa Cruz INRG to address real co-simulation
-            needs — from autonomous vehicle networking to federated learning
-            over wireless.
-          </div>
-        </div>
-        <div className="nsb-uc-grid">
-          {useCases.map((uc) => (
-            <div key={uc.title} className="nsb-uc-card">
-              <div className="nsb-uc-tag">{uc.tag}</div>
-              <div className="nsb-uc-title">{uc.title}</div>
-              <div className="nsb-uc-desc">{uc.desc}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ── How it works ── */}
-      <div className="nsb-how">
-        <div className="nsb-section-header">
-          <div className="nsb-section-label">Message Lifecycle</div>
-          <div className="nsb-section-title">How NSB works</div>
-          <div className="nsb-section-sub">
-            A clean five-step pipeline from application send to application
-            receive — with the network simulator transparently in the middle.
-          </div>
-        </div>
-        <div className="nsb-how-grid">
-          <div className="nsb-steps">
-            {messageSteps.map((s) => (
-              <div key={s.n} className="nsb-step">
-                <div className="nsb-step-num">{s.n}</div>
-                <div className="nsb-step-body">
-                  <div className="nsb-step-title">{s.title}</div>
-                  <div className="nsb-step-desc">{s.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="nsb-how-code">
-            <div className="nsb-how-code-label">Message flow</div>
-            <div className="nsb-flow-line">
-              <span className="nsb-flow-node">App("node0")</span>
-            </div>
-            <div className="nsb-flow-child">└─ send("node1", payload)</div>
-            <div className="nsb-flow-line">
-              <span className="nsb-flow-daemon">NSB Daemon</span>
-            </div>
-            <div className="nsb-flow-child">├─ stores in Redis</div>
-            <div className="nsb-flow-child">└─ routes to SimClient</div>
-            <div className="nsb-flow-line">
-              <span className="nsb-flow-node">Simulator</span>
-            </div>
-            <div className="nsb-flow-child">├─ fetch() → inject packet</div>
-            <div className="nsb-flow-child">└─ post("node0","node1",p)</div>
-            <div className="nsb-flow-line">
-              <span className="nsb-flow-node">App("node1")</span>
-            </div>
-            <div className="nsb-flow-child">└─ receive() → payload</div>
-            <div className="nsb-flow-modes">
-              <div className="nsb-flow-modes-label">Simulator modes</div>
-              <div className="nsb-flow-mode-row">
-                <span className="nsb-mode-badge nsb-mode-blue">
-                  System-Wide
-                </span>
-                <span className="nsb-flow-mode-desc">
-                  ns-3 · one global SimClient
-                </span>
-              </div>
-              <div className="nsb-flow-mode-row">
-                <span className="nsb-mode-badge nsb-mode-gold">Per-Node</span>
-                <span className="nsb-flow-mode-desc">
-                  OMNeT++ · one SimClient per node
-                </span>
-              </div>
-            </div>
-          </div>
+          <ConceptualDiagram />
         </div>
       </div>
 
@@ -785,8 +510,8 @@ export default function Home() {
             flexWrap: "wrap",
           }}
         >
-          <Link className="nsb-btn-primary" to="/quickstart">
-            <IconPlay /> Quickstart — 5 min
+          <Link className="nsb-btn-primary" to="/about">
+            About
           </Link>
           <Link className="nsb-btn-secondary" to="/docs">
             Browse Documentation
