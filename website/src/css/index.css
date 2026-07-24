@@ -4,7 +4,133 @@
    Contains: architecture diagram SVG styles (.arch-*) + all
    home page styles (.nsb-*, hero terminal, features, use cases,
    how-it-works, learning journey, CTA).
+   Also contains About page styles (challenge, research sections).
    ════════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════
+   CONCEPTUAL DIAGRAM SVG — Updated CSS
+   Dark mode = vivid architecture blue + original gold
+   Light mode = polished bridge palette
+════════════════════════════════════════════════ */
+
+.nsb-conceptual-diagram {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  animation: float-diagram 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 28px hsl(217 90% 62% / 0.18));
+}
+[data-theme='light'] .nsb-conceptual-diagram {
+  filter: drop-shadow(0 8px 24px hsl(220 40% 20% / 0.07));
+}
+
+/* Connector lines */
+.cd-connector-up {
+  stroke: hsl(217 90% 62%); /* vivid blue in dark mode */
+  stroke-width: 1.6;
+  stroke-dasharray: 5 3;
+  opacity: 0.8; /* stronger opacity for dark mode */
+}
+[data-theme='light'] .cd-connector-up {
+  stroke: hsl(217 91% 40%);
+  opacity: 0.55;
+}
+.cd-connector-down {
+  stroke: hsl(43 95% 60%);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 3;
+  opacity: 0.7; /* slightly stronger in dark mode */
+}
+[data-theme='light'] .cd-connector-down {
+  stroke: hsl(43 85% 42%);
+  opacity: 0.55;
+}
+
+/* Section labels */
+.cd-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  fill: hsl(217 90% 62%); /* vivid blue for dark mode */
+}
+[data-theme='light'] .cd-label { fill: hsl(217 91% 38%); }
+
+/* Gold label variant */
+.cd-label-gold {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  fill: hsl(43 95% 65%);
+}
+[data-theme='light'] .cd-label-gold { fill: hsl(43 85% 42%); }
+
+/* Node text */
+.cd-node-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  fill: hsl(217 90% 62%); /* vivid blue in dark mode */
+}
+[data-theme='light'] .cd-node-text { fill: hsl(217 91% 35%); }
+
+/* App nodes */
+.cd-node-app {
+  fill: hsl(220 52% 13% / 0.92); /* match architecture dark fill */
+  stroke: hsl(217 90% 62%);
+  stroke-width: 1.8;
+}
+[data-theme='light'] .cd-node-app {
+  fill: hsl(217 91% 50% / 0.07);
+  stroke: hsl(217 91% 40%);
+}
+
+/* NSB bridge box */
+.cd-node-nsb {
+  fill: hsl(43 95% 60% / 0.10);
+  stroke: hsl(43 95% 60%);
+  stroke-width: 2.2;
+}
+[data-theme='light'] .cd-node-nsb {
+  fill: hsl(43 95% 60% / 0.07);
+  stroke: hsl(43 85% 42%);
+  filter: drop-shadow(0 0 6px hsl(43 85% 42% / 0.35));
+}
+
+/* Simulator nodes */
+.cd-node-sim {
+  fill: hsl(220 52% 13% / 0.92); /* match architecture dark fill */
+  stroke: hsl(217 90% 62% / 0.85);
+  stroke-width: 1.6;
+}
+[data-theme='light'] .cd-node-sim {
+  fill: hsl(217 91% 50% / 0.06);
+  stroke: hsl(217 91% 40% / 0.55);
+}
+.cd-node-encapsulate {
+  fill: hsl(43 95% 60% / 0.06);
+  stroke: hsl(43 95% 60% / 0.35);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 3;
+}
+[data-theme='light'] .cd-node-encapsulate {
+  fill: hsl(43deg 85% 42% / 8%);
+  stroke: hsl(43deg 85% 42% / 60%);
+}
+
+.cd-node-bar {
+  fill: hsl(43 95% 60% / 0.15);
+  stroke: hsl(43 95% 60% / 0.5);
+  stroke-width: 1;
+}
+[data-theme='light'] .cd-node-bar {
+  fill: hsl(43 85% 42% / 0.10);
+  stroke: hsl(43 85% 42% / 0.4);
+}
+
 
 /* ════════════════════════════════════════════════
    ARCHITECTURE DIAGRAM SVG — W1 color tokens
@@ -64,7 +190,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   padding: 80px 72px 72px;
-  min-height: 620px;
+  min-height: 91.5vh;
   align-items: flex-start;
   position: relative;
   overflow: hidden;
@@ -171,6 +297,23 @@
   line-height: 1.7;
   color: var(--text2);
   max-width: 480px;
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.nsb-content-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text2);
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.nsb-about-subtitle {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text2);
+  max-width: 570px;
   margin-bottom: 36px;
   font-weight: 400;
 }
@@ -967,4 +1110,301 @@
 }
 [data-theme='dark'] .nsb-cta {
   background: linear-gradient(180deg, hsl(220 58% 9%) 0%, hsl(220 65% 5%) 100%);
+}
+
+/* ════════════════════════════════════════════════
+   ABOUT PAGE STYLES — Challenge & Research sections
+════════════════════════════════════════════════ */
+
+/* Shared "statement" headline style — smaller, clean solid color */
+.nsb-statement-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  max-width: 780px;
+  margin: 0 auto 12px;
+  color: var(--text);
+  /* no gradient — plain readable color in both themes */
+}
+[data-theme='light'] .nsb-statement-title {
+  color: hsl(220 40% 18%);
+}
+
+/* ─── The Challenge section ─── */
+/* This div must be full-width in the JSX (no max-width on it) */
+.nsb-challenge {
+  padding: 80px 72px;
+  width: 100%;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+[data-theme='dark'] .nsb-challenge {
+  background: hsl(220 48% 12%);
+}
+[data-theme='light'] .nsb-challenge {
+  background: white;
+}
+
+/* Inner content wrapper — constrain width */
+.nsb-challenge-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nsb-challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 48px;
+}
+
+@media (max-width: 900px) {
+  .nsb-challenge-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nsb-challenge-card {
+  background: linear-gradient(160deg, rgb(30 54 102 / 55%), rgb(6 15 34));
+  border: 1px solid rgba(108, 164, 254, 0.49);
+  border-radius: 14px;
+  padding: 22px 20px;
+  box-shadow: 0 4px 18px hsl(220 65% 4% / 0.25);
+  transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.nsb-challenge-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: hsl(217 90% 62% / 0.12);
+  border: 2px solid hsl(217 90% 62% / 0.5);
+  box-shadow: 0 0 12px hsl(217 90% 62% / 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: hsl(217 90% 62%);
+}
+
+.nsb-challenge-icon-gold {
+  background: hsl(43 95% 60% / 0.15);
+  border-color: hsl(43 95% 60% / 0.55);
+  box-shadow: 0 0 12px hsl(43 95% 60% / 0.2);
+  color: hsl(43 95% 60%);
+}
+
+.nsb-challenge-card:hover {
+  border-color: hsl(217 90% 62% / 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px hsl(217 90% 62% / 0.15);
+}
+
+.nsb-challenge-card-highlight {
+  background: linear-gradient(160deg, rgb(250 195 56 / 27%), rgb(158 116 10 / 10%));
+  border-color: rgb(250 195 56 / 72%);
+}
+
+.nsb-challenge-card-highlight:hover {
+  border-color: rgb(250 195 56 / 90%);
+  box-shadow: 0 14px 30px rgb(250 195 56 / 30%);
+}
+
+.nsb-challenge-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgb(230 230 230);
+  margin-bottom: 14px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.nsb-challenge-card-highlight .nsb-challenge-card-title {
+  color: hsl(43 95% 60%);
+}
+
+.nsb-challenge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nsb-challenge-list li {
+  color: rgb(230 230 230);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 8px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.nsb-challenge-desc {
+  color: rgb(180 188 205);
+  font-size: 13px;
+  line-height: 1.65;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+[data-theme='light'] .nsb-challenge-card {
+  background: linear-gradient(
+    160deg,
+    hsl(217 91% 50% / 0.05),
+    hsl(217 91% 50% / 0.02)
+  );
+  border-color: hsl(217 91% 40% / 0.18);
+  box-shadow: 0 4px 14px hsl(217 91% 40% / 0.06);
+}
+
+[data-theme='light'] .nsb-challenge-card:hover {
+  border-color: hsl(217 91% 40% / 0.4);
+  box-shadow: 0 14px 26px hsl(217 91% 40% / 0.1);
+}
+
+[data-theme='light'] .nsb-challenge-card-highlight {
+  background: linear-gradient(
+    160deg,
+    hsl(43 95% 48% / 0.12),
+    hsl(43 95% 48% / 0.04)
+  );
+  border-color: hsl(43 80% 38% / 0.4);
+}
+
+[data-theme='light'] .nsb-challenge-card-highlight:hover {
+  border-color: hsl(43 80% 38% / 0.6);
+  box-shadow: 0 14px 26px hsl(43 80% 38% / 0.1);
+}
+
+[data-theme='light'] .nsb-challenge-card-title {
+  color: hsl(220 20% 35%);
+}
+
+[data-theme='light'] .nsb-challenge-card-highlight .nsb-challenge-card-title {
+  color: hsl(43 80% 30%);
+}
+
+[data-theme='light'] .nsb-challenge-list li,
+[data-theme='light'] .nsb-challenge-desc {
+  color: hsl(220 20% 40%);
+}
+
+[data-theme='light'] .nsb-challenge-icon {
+  background: hsl(217 91% 50% / 0.08);
+  border-color: hsl(217 91% 40% / 0.4);
+  color: hsl(217 91% 40%);
+}
+
+[data-theme='light'] .nsb-challenge-icon-gold {
+  background: hsl(43 95% 48% / 0.1);
+  border-color: hsl(43 80% 38% / 0.5);
+  color: hsl(43 80% 38%);
+}
+
+/* ─── Built for Research section ─── */
+/* Matches .nsb-cta exactly — dark navy in dark, pure white in light */
+.nsb-research {
+  padding: 80px 72px;
+  max-width: none;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+/* Subtle radial accent so it doesn't look totally flat */
+.nsb-research::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 50% 50%, hsl(217 90% 62% / 0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+[data-theme='dark'] .nsb-research {
+  background: linear-gradient(180deg, hsl(220 58% 9%) 0%, hsl(220 65% 5%) 100%);
+}
+[data-theme='light'] .nsb-research {
+  /* Pure white — clearly different from use-cases hsl(220 25% 95%) */
+  background: linear-gradient(180deg,#f8f9fb,#eff1f5);
+}
+
+.nsb-research-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .nsb-research-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .nsb-research-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nsb-research-card {
+  background: linear-gradient(160deg, hsl(220 52% 13% / 0.5), hsl(220 55% 10% / 0.25));
+  border: 1px solid hsl(217 90% 62% / 0.15);
+  border-radius: 14px;
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow: 0 4px 16px hsl(220 65% 4% / 0.2);
+  transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.nsb-research-card:hover {
+  border-color: hsl(217 90% 62% / 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 26px hsl(217 90% 62% / 0.15);
+}
+
+.nsb-research-icon {
+  font-size: 24px;
+  margin: 0 auto 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: hsl(217 90% 62% / 0.12);
+  border: 1px solid hsl(217 90% 62% / 0.28);
+  box-shadow: 0 0 14px hsl(217 90% 62% / 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(217 90% 62%);
+}
+
+.nsb-research-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: hsl(220 25% 72%);
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+[data-theme='light'] .nsb-research-card {
+  background: linear-gradient(
+    160deg,
+    hsl(217 91% 50% / 0.04),
+    hsl(217 91% 50% / 0.01)
+  );
+  border-color: hsl(217 91% 40% / 0.15);
+  box-shadow: 0 4px 12px hsl(217 91% 40% / 0.05);
+}
+
+[data-theme='light'] .nsb-research-card:hover {
+  border-color: hsl(217 91% 40% / 0.35);
+  box-shadow: 0 12px 22px hsl(217 91% 40% / 0.08);
+}
+
+[data-theme='light'] .nsb-research-icon {
+  background: hsl(217 91% 50% / 0.08);
+  border-color: hsl(217 91% 40% / 0.25);
+  color: hsl(217 91% 40%);
+}
+
+[data-theme='light'] .nsb-research-title {
+  color: hsl(220 20% 35%);
 }
