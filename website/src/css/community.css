@@ -1,0 +1,335 @@
+/* ════════════════════════════════════════════════════════════════
+   COMMUNITY.CSS — Community page (src/pages/community.tsx)
+   Requires: base.css AND get-started.css
+   community.tsx uses .gs-stage-badge / .gs-stage-dot directly in
+   its JSX — those classes are defined in get-started.css, so load
+   it alongside this file (order doesn't matter, no class clashes).
+   Contains: .comm-* styles.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════
+   COMMUNITY PAGE  (src/pages/community.tsx)
+   Replace the entire old COMMUNITY PAGE block with this.
+   Reuses: gs-stage-badge, gs-stage-dot, animate-* from GS/QS.
+   ══════════════════════════════════════════════════════════════ */
+
+.comm-page {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 52px 40px 80px;
+}
+
+/* ── Hero ── */
+.comm-hero { margin-bottom: 44px; max-width: 680px; }
+.comm-page-title {
+  font-size: 36px; font-weight: 800;
+  letter-spacing: -0.5px; color: var(--text);
+  margin: 12px 0 10px; line-height: 1.15;
+}
+.comm-page-sub {
+  font-size: 15.5px; color: var(--text2);
+  line-height: 1.7; margin: 0;
+}
+
+/* ── Section labels + titles ── */
+.comm-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--text3);
+  margin-bottom: 6px;
+}
+.comm-section-title {
+  font-size: 22px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px;
+}
+.comm-section-sub {
+  font-size: 13.5px; color: var(--text2);
+  line-height: 1.65; margin-bottom: 20px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TWO-COL: Connect + Research
+   ══════════════════════════════════════════════════════════════ */
+.comm-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 28px;
+  align-items: start;
+}
+
+/* ── Channel cards ── */
+.comm-channels { display: flex; flex-direction: column; gap: 10px; }
+
+.comm-channel {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid;
+  text-decoration: none;
+  transition: transform .18s ease, border-color .15s, box-shadow .15s, background .15s;
+}
+/* Dark base */
+[data-theme='dark'] .comm-channel {
+  background: linear-gradient(160deg, hsl(220 55% 13%) 0%, hsl(224 50% 9%) 100%);
+  border-color: hsl(220 35% 22%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+/* Light base */
+[data-theme='light'] .comm-channel {
+  background: linear-gradient(160deg, hsl(217 55% 97%) 0%, #fff 100%);
+  border-color: hsl(217 35% 86%);
+  box-shadow: 0 2px 10px rgba(37,99,235,.05);
+}
+
+/* hover — blue glow for all, slight right slide */
+.comm-channel:hover {
+  transform: translateX(4px);
+  border-color: hsl(217 90% 60% / .55);
+  box-shadow: 0 8px 24px hsl(217 90% 60% / .12);
+  text-decoration: none;
+}
+/* gold-accent hover for team */
+.comm-channel-gold:hover {
+  border-color: hsl(43 85% 52% / .55);
+  box-shadow: 0 8px 24px hsl(43 85% 52% / .12);
+}
+
+/* Icon badge */
+.comm-ch-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; border: 1px solid;
+  transition: box-shadow .2s;
+}
+.comm-ch-icon-gh   { color: hsl(213 31% 80%); background: hsl(216 20% 14% / .70); border-color: hsl(216 14% 30% / .40); }
+.comm-ch-icon-disc { color: hsl(235 86% 70%); background: hsl(235 86% 65% / .10); border-color: hsl(235 86% 65% / .25); }
+.comm-ch-icon-mail { color: var(--nsb-blue);  background: hsl(217 90% 62% / .10); border-color: hsl(217 90% 62% / .25); }
+.comm-ch-icon-team { color: var(--nsb-gold);  background: hsl(43  95% 60% / .10); border-color: hsl(43  95% 60% / .25); }
+[data-theme='light'] .comm-ch-icon-gh   { color: hsl(216 14% 30%); background: hsl(216 14% 92%); border-color: hsl(216 14% 80%); }
+[data-theme='light'] .comm-ch-icon-disc { color: hsl(235 86% 52%); background: hsl(235 86% 94%); border-color: hsl(235 86% 80%); }
+[data-theme='light'] .comm-ch-icon-mail { color: hsl(217 90% 38%); background: hsl(217 90% 94%); border-color: hsl(217 90% 78%); }
+[data-theme='light'] .comm-ch-icon-team { color: hsl(43  85% 30%); background: hsl(43  85% 93%); border-color: hsl(43  85% 72%); }
+
+.comm-channel:hover .comm-ch-icon-gh   { box-shadow: 0 0 14px hsl(216 14% 60% / .25); }
+.comm-channel:hover .comm-ch-icon-disc { box-shadow: 0 0 14px hsl(235 86% 65% / .30); }
+.comm-channel:hover .comm-ch-icon-mail { box-shadow: 0 0 14px hsl(217 90% 62% / .30); }
+.comm-channel:hover .comm-ch-icon-team { box-shadow: 0 0 14px hsl(43  95% 60% / .30); }
+
+.comm-ch-body { flex: 1; min-width: 0; }
+.comm-ch-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.comm-ch-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.comm-ch-arrow { color: var(--text4); flex-shrink: 0; transition: transform .15s, color .15s; }
+.comm-channel:hover .comm-ch-arrow { color: var(--nsb-blue); transform: translateX(3px); }
+.comm-channel-gold:hover .comm-ch-arrow { color: var(--nsb-gold); }
+
+/* ── Research paper cards ── */
+.comm-papers { display: flex; flex-direction: column; gap: 14px; }
+
+.comm-paper-card {
+  padding: 20px 20px 18px;
+  border-radius: 14px;
+  border: 1.5px solid;
+  transition: transform .18s ease, border-color .15s, box-shadow .15s;
+}
+[data-theme='dark'] .comm-paper-card {
+  background: linear-gradient(160deg, hsl(220 55% 13%) 0%, hsl(224 50% 9%) 100%);
+  border-color: hsl(220 35% 22%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+[data-theme='light'] .comm-paper-card {
+  background: linear-gradient(160deg, hsl(217 55% 97%) 0%, #fff 100%);
+  border-color: hsl(217 35% 86%);
+  box-shadow: 0 2px 10px rgba(37,99,235,.05);
+}
+.comm-paper-card:hover {
+  transform: translateY(-3px);
+  border-color: hsl(217 90% 60% / .50);
+  box-shadow: 0 12px 28px hsl(217 90% 60% / .12);
+}
+
+.comm-paper-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: .5px;
+  text-transform: uppercase; margin-bottom: 8px;
+  color: var(--nsb-gold);
+  display: inline-block;
+  padding: 2px 8px; border-radius: 5px;
+  border: 1px solid hsl(43 85% 52% / .35);
+  background: hsl(43 85% 52% / .08);
+}
+[data-theme='light'] .comm-paper-tag { color: hsl(43 85% 30%); }
+.comm-paper-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 7px; line-height: 1.4; }
+.comm-paper-desc  { font-size: 12.5px; color: var(--text2); line-height: 1.65; margin-bottom: 10px; }
+.comm-paper-link  {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12.5px; font-weight: 600; color: var(--nsb-blue);
+  text-decoration: none; transition: gap .15s;
+}
+[data-theme='light'] .comm-paper-link { color: hsl(217 90% 38%); }
+.comm-paper-link:hover { gap: 8px; text-decoration: none; }
+
+/* ══════════════════════════════════════════════════════════════
+   BOTTOM GRID: About + Related/Citation
+   ══════════════════════════════════════════════════════════════ */
+.comm-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+/* ── Shared panel style — same metallic navy as contrib/tut cards ── */
+.comm-panel {
+  padding: 28px;
+  border-radius: 16px;
+  border: 1.5px solid;
+  display: flex;
+  flex-direction: column;
+}
+[data-theme='dark'] .comm-panel {
+  background: linear-gradient(160deg, hsl(220 55% 13%) 0%, hsl(224 50% 9%) 100%);
+  border-color: hsl(220 35% 22%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 2px 10px rgba(0,0,0,.25);
+}
+[data-theme='light'] .comm-panel {
+  background: linear-gradient(160deg, hsl(217 55% 97%) 0%, #fff 100%);
+  border-color: hsl(217 35% 84%);
+  box-shadow: 0 3px 14px rgba(37,99,235,.06);
+}
+
+.comm-panel-title {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  margin-bottom: 16px; letter-spacing: -.2px;
+}
+.comm-panel-about p {
+  font-size: 13px; color: var(--text2);
+  line-height: 1.75; margin-bottom: 12px;
+}
+.comm-panel-about strong { color: var(--text); }
+
+/* ── Maintainer card (Image 2 style) ── */
+.comm-maintainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 16px 0 18px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1.5px solid;
+}
+[data-theme='dark'] .comm-maintainer {
+  background: hsl(217 90% 62% / .07);
+  border-color: hsl(217 90% 62% / .22);
+}
+[data-theme='light'] .comm-maintainer {
+  background: hsl(217 80% 97%);
+  border-color: hsl(217 70% 82% / .55);
+  box-shadow: 0 2px 8px rgba(37,99,235,.06);
+}
+
+.comm-maintainer-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: var(--nsb-blue);
+  background: hsl(217 90% 62% / .10);
+  border: 1px solid hsl(217 90% 62% / .25);
+}
+[data-theme='light'] .comm-maintainer-icon {
+  color: hsl(217 90% 38%);
+  background: hsl(217 90% 92%);
+  border-color: hsl(217 90% 76%);
+}
+.comm-maintainer-body { flex: 1; min-width: 0; }
+.comm-maintainer-label {
+  font-size: 11px; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: .5px; text-transform: uppercase;
+  color: var(--text3); margin-bottom: 3px;
+}
+.comm-maintainer-name {
+  font-size: 14.5px; font-weight: 700; color: var(--text);
+  margin-bottom: 2px; line-height: 1.3;
+}
+.comm-maintainer-role {
+  font-size: 12px; color: var(--nsb-gold); margin-bottom: 8px;
+}
+[data-theme='light'] .comm-maintainer-role { color: hsl(43 85% 32%); }
+.comm-maintainer-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 13px; font-weight: 700; color: var(--nsb-blue);
+  text-decoration: none; transition: gap .15s;
+}
+[data-theme='light'] .comm-maintainer-link { color: hsl(217 90% 38%); }
+.comm-maintainer-link:hover { gap: 8px; text-decoration: none; }
+
+/* ── OSPO badge ── */
+.comm-ospo-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  margin-top: auto; padding: 7px 14px;
+  border-radius: 99px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600; letter-spacing: .3px;
+  color: hsl(217 90% 58%);
+  border: 1px solid hsl(217 90% 62% / .28);
+  background: hsl(217 90% 62% / .07);
+  width: fit-content;
+}
+[data-theme='light'] .comm-ospo-badge { color: hsl(217 90% 38%); background: hsl(217 90% 95%); border-color: hsl(217 90% 72% / .40); }
+
+/* ── Related projects list ── */
+.comm-related-list {
+  display: flex; flex-direction: column;
+  margin-bottom: 20px;
+}
+.comm-related-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  transition: transform .15s, color .15s;
+}
+.comm-related-row:last-child { border-bottom: none; }
+.comm-related-row:hover { transform: translateX(3px); text-decoration: none; }
+.comm-related-row:hover .comm-related-name { color: var(--nsb-blue); }
+.comm-related-body { flex: 1; }
+.comm-related-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 1px; transition: color .15s; }
+.comm-related-desc { font-size: 12px; color: var(--text2); }
+.comm-related-row svg { color: var(--text3); flex-shrink: 0; transition: color .15s; }
+.comm-related-row:hover svg { color: var(--nsb-blue); }
+
+/* ── Citation block ── */
+.comm-citation {
+  margin-top: auto;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid hsl(43 85% 52% / .28);
+  background: hsl(43 85% 52% / .06);
+}
+[data-theme='light'] .comm-citation {
+  background: hsl(43 85% 96%);
+  border-color: hsl(43 85% 68% / .40);
+}
+.comm-citation-title {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 700;
+  color: var(--nsb-gold); margin-bottom: 8px;
+}
+[data-theme='light'] .comm-citation-title { color: hsl(43 85% 30%); }
+.comm-citation-title svg { color: var(--nsb-gold); }
+.comm-citation-body {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; color: var(--text2);
+  line-height: 1.85;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .comm-two-col      { grid-template-columns: 1fr; gap: 32px; }
+  .comm-bottom-grid  { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .comm-page         { padding: 36px 18px 60px; }
+  .comm-page-title   { font-size: 28px; }
+}
