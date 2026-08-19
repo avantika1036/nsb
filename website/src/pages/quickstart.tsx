@@ -825,8 +825,8 @@ time.sleep(3)`} />
               <div className="qs2-cat-desc">Step-by-step tutorials to help you get hands-on with NSB.</div>
               <ul className="qs2-cat-links">
                 <li><Link to="/tutorials">All Tutorials</Link></li>
-                <li><Link to="/docs/examples">Example Applications</Link></li>
-                <li><Link to="/docs/examples/code-samples">Code Samples</Link></li>
+                <li><Link to="/tutorials/beginner/experiment-with-the-mock-simulator">Example Applications</Link></li>
+                <li><Link to="/tutorials/intermediate/networkx-graph-simulator">Code Samples</Link></li>
               </ul>
               <Link className="qs2-cat-btn qs2-cat-btn-teal" to="/tutorials">
                 Explore Tutorials <IconArrowRight/>
@@ -841,7 +841,7 @@ time.sleep(3)`} />
               <ul className="qs2-cat-links">
                 <li><Link to="/docs/backends/rabbitmq-backend">RabbitMQ Backend</Link></li>
                 <li><Link to="/docs/backends/rabbitmq-enhancements">RabbitMQ Enhancements</Link></li>
-                <li><Link to="/docs/api-reference/protobuf">Protobuf Reference</Link></li>
+                <li><Link to="/docs/protocol/protobuf-schema">Protobuf Reference</Link></li>
               </ul>
               <Link className="qs2-cat-btn qs2-cat-btn-green2" to="/docs/backends/rabbitmq-backend">
                 Explore Advanced <IconArrowRight/>
