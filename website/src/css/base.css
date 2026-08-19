@@ -270,8 +270,24 @@ code, pre, .prism-code {
 
 /* ─── TOC ─── */
 .table-of-contents {
+  position: relative;
   border-left: 2px solid var(--ifm-toc-border-color) !important;
   padding-left: 14px !important;
+  margin-top: 10px;
+}
+.table-of-contents::before {
+  content: 'ON THIS PAGE';
+  display: block;
+  margin: 0 0 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: hsl(220 18% 42%);
+}
+[data-theme='dark'] .table-of-contents::before {
+  color: hsl(220 20% 78%);
 }
 .table-of-contents__link {
   font-size: 12.5px;
