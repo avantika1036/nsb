@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import '../css/contribute.css';
 
@@ -100,22 +100,62 @@ const devSteps = [
   { title: 'Submit a pull request',   desc: 'Open a PR against the main branch with a clear description and the test you ran.',   code: null },
 ];
 
-const goodFirstIssues = [
-  { title: 'Dead Letter Exchange for the RMQ transport',               tags: ['good first issue'], tagTypes: ['green']  },
-  { title: 'Publisher Confirms in NSBClientRMQ',                       tags: ['good first issue'], tagTypes: ['green']  },
-  { title: 'Cross-simulator handling of null bytes in payloads',       tags: ['cpp'],              tagTypes: ['blue']   },
-  { title: 'Add a third example: 50-node OMNeT++ network',             tags: ['docs'],             tagTypes: ['orange'] },
-  { title: 'Mermaid diagram of the send→fetch→post→receive lifecycle', tags: ['docs'],             tagTypes: ['orange'] },
-  { title: 'Consumer prefetch / QoS tuning in NSBClientRMQ',           tags: ['good first issue'], tagTypes: ['green']  },
-];
+type GitHubIssue = {
+  title: string;
+  html_url: string;
+  labels: Array<{ name: string }>;
+  pull_request?: { url: string };
+};
 
 const tagClassMap: Record<string, string> = {
-  green: 'gfi-tag-green', blue: 'gfi-tag-blue',
-  orange: 'gfi-tag-orange', red: 'gfi-tag-red',
+  green: 'gfi-tag-green',
+  blue: 'gfi-tag-blue',
+  orange: 'gfi-tag-orange',
+  red: 'gfi-tag-red',
+};
+
+const getIssueTagClass = (label: string): string => {
+  const normalized = label.toLowerCase();
+
+  if (normalized.includes('good first')) return tagClassMap.green;
+  if (normalized.includes('bug') || normalized.includes('error')) return tagClassMap.red;
+  if (normalized.includes('doc') || normalized.includes('documentation')) return tagClassMap.orange;
+  if (normalized.includes('enhancement') || normalized.includes('feature')) return tagClassMap.blue;
+
+  return tagClassMap.blue;
 };
 
 /* ─── Page ─── */
 export default function Contribute() {
+  const [issues, setIssues] = useState<GitHubIssue[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch('https://api.github.com/repos/nsb-ucsc/nsb/issues?state=open&per_page=100')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`GitHub API request failed: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data) || !isMounted) return;
+
+        const liveIssues = data.filter((item: GitHubIssue) => !item.pull_request).slice(0, 6);
+        setIssues(liveIssues);
+      })
+      .catch(() => {
+        if (isMounted) {
+          setIssues([]);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <Layout title="Contribute — NSB" description="Contribute to NSB. Code, documentation, research, and testing contributions welcome.">
       <div className="contrib-page">
@@ -215,18 +255,26 @@ export default function Contribute() {
         <p className="contrib-section-sub">These issues are well-scoped and documented. Great for first-time contributors.</p>
 
         <div className="gfi-list animate-fade-up animate-delay-3">
-          {goodFirstIssues.map((g) => (
-            <a key={g.title} className="gfi-item" href="https://github.com/nsb-ucsc/nsb_beta/issues" target="_blank" rel="noopener noreferrer">
-              <div className="gfi-dot"/>
-              <div className="gfi-title">{g.title}</div>
-              <div className="gfi-tags">
-                {g.tags.map((tag, ti) => (
-                  <span key={tag} className={`gfi-tag ${tagClassMap[g.tagTypes[ti]]}`}>{tag}</span>
-                ))}
-              </div>
-              <IconArrow/>
-            </a>
-          ))}
+          {issues.map((issue) => {
+            const visibleLabels = issue.labels.filter((label) => label.name && label.name !== 'help wanted').slice(0, 2);
+
+            return (
+              <a key={issue.html_url} className="gfi-item" href={issue.html_url} target="_blank" rel="noopener noreferrer">
+                <div className="gfi-dot"/>
+                <div className="gfi-title">{issue.title}</div>
+                <div className="gfi-tags">
+                  {visibleLabels.length > 0 ? (
+                    visibleLabels.map((label) => (
+                      <span key={label.name} className={`gfi-tag ${getIssueTagClass(label.name)}`}>{label.name}</span>
+                    ))
+                  ) : (
+                    <span className="gfi-tag gfi-tag-blue">issue</span>
+                  )}
+                </div>
+                <IconArrow/>
+              </a>
+            );
+          })}
         </div>
 
         <div className="contrib-gfi-footer">
