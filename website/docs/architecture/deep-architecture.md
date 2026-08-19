@@ -61,6 +61,20 @@ Every client in NSB2 — both `NsbAppClient` and `NsbSimClient` — maintains a 
 | `send` | Unidirectional (client → daemon) | Outgoing payload metadata (SEND, POST operations) |
 | `recv` | Bidirectional | Incoming payload reception / listening (FETCH, RECEIVE, FORWARD) |
 
+```mermaid
+flowchart LR
+    subgraph Client
+        C["NSBAppClient\nor NSBSimClient"]
+    end
+    subgraph Daemon
+        D["NSB Daemon\n(Server + Handlers)"]
+    end
+
+    C <-->|"ctrl  (bidirectional)\nPING · INIT · EXIT"| D
+    C -->|"send  (unidirectional)\nSEND · POST"| D
+    C <-->|"recv  (bidirectional)\nFETCH · RECEIVE · FWD"| D
+```
+
 ### Why Three Sub-Channels?
 
 This design follows the principle of **disentanglement** (from Dutch: *ontvlechten*): dedicating separate connections to the control plane and the incoming/outgoing data planes.
@@ -139,6 +153,47 @@ A shared **key-generation helper** is provided in the base class to guarantee gl
 **Possible extensions:** Memcached (memory-constrained distributed deployments), file-backed storage (very large payloads).
 
 Cache use is **optional** and can be disabled in configuration.
+
+```mermaid
+classDiagram
+    class Comms {
+        <<abstract>>
+        +connectToServer()
+        +sendMessage(channel, msg)
+        +receiveMessage(channel, timeout)
+        +listenForMessage(channel, timeout)
+        +closeConnection()
+    }
+    class SocketInterface {
+        +connectToServer()
+        +sendMessage(channel, msg)
+        +receiveMessage(channel, timeout)
+        +listenForMessage(channel, timeout)
+        +closeConnection()
+    }
+    class RabbitMQInterface {
+        +connectToServer()
+        +sendMessage(channel, msg)
+        +receiveMessage(channel, timeout)
+        +listenForMessage(channel, timeout)
+        +closeConnection()
+    }
+    class DBConnector {
+        <<abstract>>
+        +store(value) key
+        +checkOut(key) value
+        +peek(key) value
+    }
+    class RedisConnector {
+        +store(value) key
+        +checkOut(key) value
+        +peek(key) value
+    }
+
+    Comms <|-- SocketInterface : default
+    Comms <|-- RabbitMQInterface : alternative
+    DBConnector <|-- RedisConnector : default
+```
 
 
 ## Technology Stack Summary
