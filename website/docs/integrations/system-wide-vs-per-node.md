@@ -12,9 +12,18 @@ The two simulator integration topologies NSB supports, with their diagrams, cons
 
 A single simulator client handles all message routing. When a payload is fetched, it can come from any source node.
 
-```
-AppClient(node0) ──send──► Daemon ──fetch──► SimClient (global)
-AppClient(node1) ──send──► Daemon ──fetch──► SimClient (global)
+```mermaid
+flowchart LR
+    A0["AppClient(node0)"]
+    A1["AppClient(node1)"]
+    A2["AppClient(node2)"]
+    D["NSB Daemon"]
+    S["SimClient\nglobal — fetches any source"]
+
+    A0 -->|"send"| D
+    A1 -->|"send"| D
+    A2 -->|"send"| D
+    D -->|"fetch (any)"| S
 ```
 
 **Constraint:** Only one `NSBSimClient` may connect to the daemon at a time in this mode.
@@ -26,9 +35,22 @@ AppClient(node1) ──send──► Daemon ──fetch──► SimClient (glob
 
 Each simulated node has its own simulator client. The client identifier for `NSBSimClient` must match the corresponding `NSBAppClient` identifier.
 
-```
-AppClient("node0") ──send──► Daemon ──fetch──► SimClient("node0")
-AppClient("node1") ──send──► Daemon ──fetch──► SimClient("node1")
+```mermaid
+flowchart LR
+    A0["AppClient(node0)"]
+    A1["AppClient(node1)"]
+    A2["AppClient(node2)"]
+    D["NSB Daemon"]
+    S0["SimClient(node0)"]
+    S1["SimClient(node1)"]
+    S2["SimClient(node2)"]
+
+    A0 -->|"send"| D
+    A1 -->|"send"| D
+    A2 -->|"send"| D
+    D -->|"fetch node0 only"| S0
+    D -->|"fetch node1 only"| S1
+    D -->|"fetch node2 only"| S2
 ```
 
 **Identifier matching rule:** `NSBSimClient("node0")` only fetches messages sent from `AppClient("node0")`, and posts make the payload available to `AppClient` at the destination — so the simulator client's identifier string must exactly match its corresponding application client's identifier string.
