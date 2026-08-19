@@ -12,9 +12,16 @@ NSB supports two simulator modes that control how many `NSBSimClient` instances 
 
 A single simulator client handles all message routing. When a payload is fetched, it can come from any source node.
 
-```
-AppClient(node0) ──send──► Daemon ──fetch──► SimClient (global)
-AppClient(node1) ──send──► Daemon ──fetch──► SimClient (global)
+```mermaid
+flowchart LR
+    A0["AppClient(node0)"]
+    A1["AppClient(node1)"]
+    D["NSB Daemon"]
+    S["SimClient — global\nfetches any source"]
+
+    A0 -->|"send"| D
+    A1 -->|"send"| D
+    D -->|"fetch"| S
 ```
 
 - A single `NSBSimClient` handles all message fetching and posting for the entire simulation
@@ -29,9 +36,18 @@ AppClient(node1) ──send──► Daemon ──fetch──► SimClient (glob
 
 Each simulated node has its own simulator client. The client identifier for `NSBSimClient` must match the corresponding `NSBAppClient` identifier.
 
-```
-AppClient("node0") ──send──► Daemon ──fetch──► SimClient("node0")
-AppClient("node1") ──send──► Daemon ──fetch──► SimClient("node1")
+```mermaid
+flowchart LR
+    A0["AppClient(node0)"]
+    A1["AppClient(node1)"]
+    D["NSB Daemon"]
+    S0["SimClient(node0)\nfetches node0 only"]
+    S1["SimClient(node1)\nfetches node1 only"]
+
+    A0 -->|"send"| D
+    A1 -->|"send"| D
+    D -->|"fetch (node0)"| S0
+    D -->|"fetch (node1)"| S1
 ```
 
 - Each simulated node has its own `NSBSimClient`
