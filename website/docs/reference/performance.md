@@ -61,6 +61,18 @@ Additional metrics:
 | 100 | 16 ms | 13.5 ms | 13 ms |
 | 500 | **142.4 ms** | **150.3 ms** | **233 ms** |
 
+```mermaid
+xychart-beta
+    title "Average Round-Trip Latency (ms) vs Node Count"
+    x-axis ["10 nodes", "50 nodes", "100 nodes", "500 nodes"]
+    y-axis "Latency (ms)" 0 --> 240
+    line [6.9, 9.1, 16, 142.4]
+    line [6.4, 8.3, 13.5, 150.3]
+    line [6.0, 5.1, 13, 233]
+```
+
+*Lines represent 10 msg/s, 100 msg/s, and 1,000 msg/s respectively. The 500-node spike reflects the file descriptor ceiling — see Analysis below.*
+
 ### Daemon CPU Utilization (Average %)
 
 | Nodes | 10 msg/s | 100 msg/s | 1,000 msg/s |
@@ -70,6 +82,18 @@ Additional metrics:
 | 100 | 68.5% | 73.3% | 75.9% |
 | 500 | 77.2% | 77.3% | **77.4%** |
 
+```mermaid
+xychart-beta
+    title "Average Daemon CPU Utilization (%) vs Node Count"
+    x-axis ["10 nodes", "50 nodes", "100 nodes", "500 nodes"]
+    y-axis "CPU (%)" 0 --> 100
+    line [23.3, 52.9, 68.5, 77.2]
+    line [25.8, 55.4, 73.3, 77.3]
+    line [33.3, 69.6, 75.9, 77.4]
+```
+
+*Lines represent 10 msg/s, 100 msg/s, and 1,000 msg/s respectively. CPU caps near 77% at 500 nodes due to file descriptor reconstruction overhead.*
+
 ### Peak Daemon Memory Usage (MB, RSS)
 
 | Nodes | 10 msg/s | 100 msg/s | 1,000 msg/s |
@@ -78,6 +102,18 @@ Additional metrics:
 | 50 | 6.92 MB | 6.95 MB | 6.94 MB |
 | 100 | 6.94 MB | 6.96 MB | 6.99 MB |
 | 500 | 7.33 MB | 7.42 MB | 7.52 MB |
+
+```mermaid
+xychart-beta
+    title "Peak Daemon Memory Usage (MB RSS) vs Node Count"
+    x-axis ["10 nodes", "50 nodes", "100 nodes", "500 nodes"]
+    y-axis "Memory (MB)" 6 --> 8
+    line [6.84, 6.92, 6.94, 7.33]
+    line [6.82, 6.95, 6.96, 7.42]
+    line [6.84, 6.94, 6.99, 7.52]
+```
+
+*Lines represent 10 msg/s, 100 msg/s, and 1,000 msg/s respectively. Memory stays nearly flat — confirming the 500-node degradation is a polling bottleneck, not a memory issue.*
 
 
 ## Analysis

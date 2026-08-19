@@ -10,6 +10,16 @@ NSB2 was engineered around four core properties. These goals shaped every archit
 
 ## The Four Properties
 
+```mermaid
+flowchart LR
+    L["Lightweight\nMinimal latency, memory,\nand external dependencies"]
+    A["Accessible\nWorks on Linux, macOS,\nWindows via WSL"]
+    M["Modular & Extensible\nPlug-and-play components\nvia abstract base classes"]
+    S["Symmetric\nsend/receive on app side\nfetch/post on sim side\nPython & C++ parity"]
+
+    L --- A --- M --- S
+```
+
 ### Lightweight
 Resource-efficient, functionally minimal, and fast. NSB2 minimizes latency, memory utilization, and external dependencies so it does not impose unnecessary burden on users, simulations, or systems.
 
@@ -48,6 +58,21 @@ NSB2 is a **complete redesign and re-implementation** of the original Network Si
 ## Specific Improvements in NSB2
 
 These four properties translate into concrete engineering decisions:
+
+```mermaid
+flowchart TD
+    subgraph V1["NSB v1 — prior version"]
+        V1A["AppClient"] -->|"full payload\nsingle TCP socket"| V1D["Daemon"]
+        V1D -->|"full payload\nsingle TCP socket"| V1S["SimClient"]
+    end
+
+    subgraph V2["NSB2 — redesign"]
+        V2A["AppClient"] -->|"payload key only\n3 sub-channels"| V2D["Daemon"]
+        V2D -->|"payload key only\n3 sub-channels"| V2S["SimClient"]
+        V2A <-->|"store / checkout"| V2R[("Redis\n(optional)")]
+        V2S <-->|"store / checkout"| V2R
+    end
+```
 
 **Robust configuration options:**
 The prior version had a fixed polling-based system and required separate simulator clients per node. NSB2 supports configurable system modes (PULL/PUSH), simulator modes (System-Wide/Per-Node), and optional payload caching. See [System Modes](/docs/architecture/system-modes) and [Simulator Modes](/docs/architecture/simulator-modes).
