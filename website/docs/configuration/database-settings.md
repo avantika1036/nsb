@@ -81,6 +81,16 @@ When `use_db: true`, start services in this order:
 3. **Network Simulator** (with `NSBSimClient` code)
 4. **Application** (with `NSBAppClient` code)
 
+```mermaid
+flowchart TD
+    R["① Redis server\nredis-server --port 5050"]
+    D["② NSB Daemon\nnsb_daemon config.yaml"]
+    S["③ Network Simulator\nSimClient ready to fetch"]
+    A["④ Application\nAppClient begins send"]
+
+    R --> D --> S --> A
+```
+
 :::tip
 In most cases the simulator should be started before the application so it's ready to `fetch()` messages when the application begins `send()`-ing.
 :::

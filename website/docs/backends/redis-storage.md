@@ -28,6 +28,33 @@ NSB2 decouples payload content from the relay path using a fast, in-memory key-v
 4. When `NsbSimClient.post()` is called → payload re-cached → key transmitted back through bridge
 5. When `NsbAppClient.receive()` retrieves the entry → uses the key to **check out** the full payload
 
+```mermaid
+sequenceDiagram
+    participant A as NSBAppClient
+    participant R as Redis
+    participant D as NSB Daemon
+    participant S as NSBSimClient
+
+    Note over A,S: Daemon never sees payload content — only key and metadata
+
+    A->>R: store(payload) → payload_key
+    A->>D: SEND [payload_key + metadata]
+    Note over D: Stores key+metadata in TX buffer
+
+    S->>D: FETCH request
+    D->>S: FETCH response [payload_key + metadata]
+    S->>R: checkOut(payload_key) → full payload
+    Note over S: Simulate network...
+
+    S->>R: store(payload) → payload_key
+    S->>D: POST [payload_key + metadata]
+    Note over D: Stores key+metadata in RX buffer
+
+    A->>D: RECEIVE request
+    D->>A: RECEIVE response [payload_key + metadata]
+    A->>R: checkOut(payload_key) → full payload
+```
+
 The daemon **never sees the payload content** — only the key and metadata.
 
 

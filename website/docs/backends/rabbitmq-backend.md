@@ -45,42 +45,56 @@ nsb.{channel}.{client_id}
 └── nsb.config.response.{client_id}  # Client-specific config response
 ```
 
+### Architecture Diagram
+
+```mermaid
+flowchart LR
+    A["NSBAppClient"]
+    S["NSBSimClient"]
+    B["RabbitMQ Broker"]
+    D["NSBDaemon\nconfig only"]
+
+    A -->|"publish AMQP"| B
+    B -->|"deliver AMQP"| A
+    S -->|"publish AMQP"| B
+    B -->|"deliver AMQP"| S
+    D -->|"nsb.config.request"| B
+    B -->|"nsb.config.response"| D
+```
+
 ### Message Flow
 
 **Client Initialization:**
-```
-Client → INIT → nsb.config.request
-Daemon → Config → nsb.config.response.{client_id}
-Client ← receives config, is ready
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant B as RabbitMQ Broker
+    participant D as NSB Daemon
+
+    C->>B: Publish INIT to nsb.config.request
+    B->>D: Deliver INIT message
+    Note over D: Parse config, prepare response
+    D->>B: Publish ConfigParams to nsb.config.response.clientid
+    B->>C: Deliver config response
+    Note over C: Client is ready
 ```
 
-**Application Client Sends:**
-```
-App.send("dest_id", payload)
-  → Published with routing_key = nsb.recv.{dest_id}
-  → RabbitMQ routes to dest's RECV queue
-  → No daemon involvement
-```
+**Application Client Sends and Simulator Fetches:**
 
-**Application Client Receives:**
-```
-App.receive()
-  → Consumes from nsb.recv.{client_id}
-  → Returns MessageEntry or None on timeout
-```
+```mermaid
+sequenceDiagram
+    participant A as NSBAppClient
+    participant B as RabbitMQ Broker
+    participant S as NSBSimClient
 
-**Simulator Client Fetches:**
-```
-Sim.fetch()
-  → Consumes from nsb.recv.{sim_id}  (SEND messages routed here)
-  → Returns MessageEntry
-```
-
-**Simulator Client Posts:**
-```
-Sim.post(src_id, dest_id, payload)
-  → Published with routing_key = nsb.recv.{dest_id}
-  → App client's RECV queue receives it
+    A->>B: Publish payload to nsb.recv.dest_id
+    Note over B: Routes via routing_key — no daemon involved
+    S->>B: Consume from nsb.recv.sim_id
+    B->>S: Deliver payload
+    Note over S: Simulate network...
+    S->>B: Publish result to nsb.recv.dest_id
+    B->>A: Deliver to app client RECV queue
 ```
 
 

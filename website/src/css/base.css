@@ -270,8 +270,24 @@ code, pre, .prism-code {
 
 /* ─── TOC ─── */
 .table-of-contents {
+  position: relative;
   border-left: 2px solid var(--ifm-toc-border-color) !important;
   padding-left: 14px !important;
+  margin-top: 10px;
+}
+.table-of-contents::before {
+  content: 'ON THIS PAGE';
+  display: block;
+  margin: 0 0 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: hsl(220 18% 42%);
+}
+[data-theme='dark'] .table-of-contents::before {
+  color: hsl(220 20% 78%);
 }
 .table-of-contents__link {
   font-size: 12.5px;
@@ -302,20 +318,218 @@ div[class*="codeBlockContainer"] {
   box-shadow: 0 2px 8px hsl(220 50% 12% / 0.06);
 }
 
-/* ─── Inline code — W1 gold tint ─── */
-[data-theme='dark'] code:not([class*="language"]) {
+/* ─── Code blocks only — keep inline paragraph code normal ─── */
+[data-theme='dark'] pre code,
+[data-theme='dark'] .theme-code-block pre code,
+[data-theme='dark'] div[class*="codeBlockContainer"] pre code {
   background: hsl(220 60% 7%);
   border: 1px solid hsl(220 35% 22%);
   color: hsl(43 95% 60%);
   border-radius: 4px;
-  padding: 1px 6px;
+  padding: 18px 20px;
 }
-[data-theme='light'] code:not([class*="language"]) {
+[data-theme='light'] pre code,
+[data-theme='light'] .theme-code-block pre code,
+[data-theme='light'] div[class*="codeBlockContainer"] pre code {
   background: hsl(217 91% 50% / 0.07);
   border: 1px solid hsl(217 91% 50% / 0.2);
   color: hsl(217 91% 35%);
   border-radius: 4px;
-  padding: 1px 6px;
+  padding: 18px 20px;
+}
+
+/* Inline code in prose — keep the original pill colors */
+[data-theme='dark'] :not(pre) > code:not([class]) {
+  background: hsl(220 60% 7%);
+  border: 1px solid hsl(220 35% 22%);
+  color: hsl(43 95% 60%);
+  border-radius: 4px;
+  padding: 0.15rem 0.35rem;
+}
+[data-theme='light'] :not(pre) > code:not([class]) {
+  background: hsl(217 91% 50% / 0.07);
+  border: 1px solid hsl(217 91% 50% / 0.2);
+  color: hsl(217 91% 35%);
+  border-radius: 4px;
+  padding: 0.15rem 0.35rem;
+}
+
+/* Docs markdown code blocks — add a language header bar */
+.theme-doc-markdown div[class*="codeBlockContainer"] {
+  position: relative;
+  background: hsl(220 25% 96%);
+  --prism-background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  padding-top: 38px;
+}
+.theme-doc-markdown div[class*="codeBlockContainer"] pre {
+  margin: 0;
+  padding: 18px 20px;
+  background: transparent;
+  background-color: transparent !important;
+  overflow-x: auto;
+}
+.theme-doc-markdown div[class*="codeBlockContainer"] pre code {
+  display: block;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: inherit;
+  font: inherit;
+  white-space: pre;
+}
+.theme-doc-markdown div[class*="codeBlockContainer"]::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 38px;
+  border-bottom: 1px solid var(--border);
+  background: hsl(220 20% 93%);
+  z-index: 1;
+}
+.theme-doc-markdown div[class*="codeBlockContainer"]::after {
+  content: 'Code';
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  z-index: 2;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--nsb-blue);
+  font-weight: 700;
+  font-family: var(--ifm-font-family-monospace);
+  background: rgba(59, 130, 246, 0.10);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(59, 130, 246, 0.20);
+  pointer-events: none;
+}
+.theme-doc-markdown div[class*="codeBlockContainer"] {
+  box-shadow: none;
+}
+[data-theme='light'] .theme-doc-markdown div[class*="codeBlockContainer"]::before {
+  background: rgb(234, 236, 241);
+}
+[data-theme='light'] .theme-doc-markdown div[class*="codeBlockContainer"]::after {
+  background: rgba(59, 130, 246, 0.10);
+  border-color: rgba(59, 130, 246, 0.20);
+}
+[data-theme='dark'] .theme-doc-markdown div[class*="codeBlockContainer"]::before {
+  background: rgb(11, 18, 32);
+  border-bottom-color: rgba(59, 130, 246, 0.18);
+}
+[data-theme='dark'] .theme-doc-markdown div[class*="codeBlockContainer"]::after {
+  background: hsl(217 90% 62% / 0.12);
+  border-color: hsl(217 90% 62% / 0.25);
+}
+[data-theme='dark'] .theme-doc-markdown div[class*="codeBlockContainer"] {
+  background: #030712;
+  --prism-background-color: rgb(2, 6, 23);
+  border-color: rgba(59,130,246,.20);
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,.06),
+    0 20px 40px rgba(0,0,0,.35);
+}
+.theme-doc-markdown div[class*="codeBlockContainer"] pre {
+  background: transparent;
+}
+[data-theme='dark'] .theme-doc-markdown div[class*="codeBlockContainer"] pre {
+  background: rgb(2, 6, 23);
+  background-color: rgb(2, 6, 23) !important;
+}
+.theme-doc-markdown .theme-code-block .buttonGroup_M5ko {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  z-index: 2;
+  column-gap: 6px;
+}
+.theme-doc-markdown .theme-code-block .codeBlockContent_QJqH {
+  position: static;
+}
+.theme-doc-markdown .theme-code-block .buttonGroup_M5ko button {
+  opacity: 1 !important;
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid var(--border2);
+  background: var(--bg3);
+  color: var(--text3);
+}
+.theme-doc-markdown .theme-code-block .buttonGroup_M5ko button:hover {
+  border-color: var(--nsb-blue);
+  color: var(--nsb-blue);
+  background: var(--nsb-blue-dim);
+}
+[data-theme='dark'] .theme-doc-markdown .theme-code-block .buttonGroup_M5ko button {
+  background: hsl(220 52% 12%);
+  border-color: hsl(220 35% 22%);
+}
+.theme-doc-markdown div.language-text[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-text[class*="codeBlockContainer"]::after {
+  content: 'Text';
+}
+.theme-doc-markdown div.language-bash[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-bash[class*="codeBlockContainer"]::after {
+  content: 'Bash';
+}
+.theme-doc-markdown div.language-python[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-python[class*="codeBlockContainer"]::after {
+  content: 'Python';
+}
+.theme-doc-markdown div.language-cpp[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-cpp[class*="codeBlockContainer"]::after {
+  content: 'C++';
+}
+.theme-doc-markdown div.language-yaml[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-yaml[class*="codeBlockContainer"]::after {
+  content: 'YAML';
+}
+.theme-doc-markdown div.language-protobuf[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-protobuf[class*="codeBlockContainer"]::after {
+  content: 'Protobuf';
+}
+.theme-doc-markdown div.language-mermaid[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-mermaid[class*="codeBlockContainer"]::after {
+  content: 'Mermaid';
+}
+.theme-doc-markdown div.language-powershell[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-powershell[class*="codeBlockContainer"]::after {
+  content: 'PowerShell';
+}
+.theme-doc-markdown div.language-cmake[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-cmake[class*="codeBlockContainer"]::after {
+  content: 'CMake';
+}
+.theme-doc-markdown div.language-makefile[class*="codeBlockContainer"]::before {
+  content: '';
+}
+.theme-doc-markdown div.language-makefile[class*="codeBlockContainer"]::after {
+  content: 'Makefile';
 }
 
 /* ─── Tables ─── */

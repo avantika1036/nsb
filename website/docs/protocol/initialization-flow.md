@@ -10,83 +10,82 @@ The five typical message flows that occur in NSB, shown with their complete `man
 
 ## 1. Client INIT Handshake
 
-```
-Client → Daemon
-  manifest.op     = INIT
-  manifest.og     = APP_CLIENT (or SIM_CLIENT)
-  manifest.code   = CLIENT_REQUEST
-  message.intro   = IntroDetails { identifier, address, channels }
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant D as NSB Daemon
 
-Daemon → Client
-  manifest.op     = INIT
-  manifest.og     = DAEMON
-  manifest.code   = DAEMON_RESPONSE
-  message.config  = ConfigParams { sys_mode, sim_mode, use_db, ... }
+    Note over C: op=INIT, og=APP_CLIENT, code=CLIENT_REQUEST
+    C->>D: INIT [IntroDetails: identifier, address, ch_CTRL, ch_SEND, ch_RECV]
+    Note over D: Registers client, builds persistent sub-channels
+    Note over D: op=INIT, og=DAEMON, code=DAEMON_RESPONSE
+    D->>C: INIT [ConfigParams: sys_mode, sim_mode, use_db, db_address, db_port, db_num]
 ```
 
 
 ## 2. AppClient SEND
 
-```
-AppClient → Daemon
-  manifest.op       = SEND
-  manifest.og       = APP_CLIENT
-  manifest.code     = EXPLICIT_TARGET (or IMPLICIT_TARGET)
-  metadata.src_id   = "node0"
-  metadata.dest_id  = "node1"
-  metadata.size     = <payload size>
-  message.payload   = <raw bytes>   (or message.msg_key if use_db)
+```mermaid
+sequenceDiagram
+    participant A as AppClient
+    participant D as NSB Daemon
+
+    Note over A: op=SEND, og=APP_CLIENT, code=EXPLICIT_TARGET
+    A->>D: SEND [src_id=node0, dest_id=node1, payload or msg_key]
+    Note over D: Stores entry in TX buffer — no acknowledgement sent
 ```
 
 
 ## 3. SimClient FETCH (PULL mode)
 
-```
-SimClient → Daemon
-  manifest.op      = FETCH
-  manifest.og      = SIM_CLIENT
-  manifest.code    = CLIENT_REQUEST
+```mermaid
+sequenceDiagram
+    participant S as SimClient
+    participant D as NSB Daemon
 
-Daemon → SimClient (if message available)
-  manifest.op      = FETCH
-  manifest.og      = DAEMON
-  manifest.code    = MESSAGE
-  metadata.src_id  = "node0"
-  metadata.dest_id = "node1"
-  message.payload  = <raw bytes>
-
-Daemon → SimClient (if no message)
-  manifest.code    = NO_MESSAGE
+    Note over S: op=FETCH, og=SIM_CLIENT, code=CLIENT_REQUEST
+    S->>D: FETCH request
+    alt message available
+        Note over D: op=FETCH, og=DAEMON, code=MESSAGE
+        D->>S: FETCH response [src_id=node0, dest_id=node1, payload]
+    else no message
+        Note over D: op=FETCH, og=DAEMON, code=NO_MESSAGE
+        D->>S: FETCH response [NO_MESSAGE]
+    end
 ```
 
 
 ## 4. SimClient POST
 
-```
-SimClient → Daemon
-  manifest.op       = POST
-  manifest.og       = SIM_CLIENT
-  metadata.src_id   = "node0"
-  metadata.dest_id  = "node1"
-  message.payload   = <delivered payload>
+```mermaid
+sequenceDiagram
+    participant S as SimClient
+    participant R as Redis
+    participant D as NSB Daemon
+
+    Note over S: op=POST, og=SIM_CLIENT
+    S->>R: store(payload) → payload_key
+    S->>D: POST [src_id=node0, dest_id=node1, payload_key]
+    Note over D: Stores entry in RX buffer — no acknowledgement sent
 ```
 
 
 ## 5. AppClient RECEIVE (PULL mode)
 
-```
-AppClient → Daemon
-  manifest.op     = RECEIVE
-  manifest.og     = APP_CLIENT
-  manifest.code   = CLIENT_REQUEST (or EXPLICIT_TARGET if dest_id specified)
+```mermaid
+sequenceDiagram
+    participant A as AppClient
+    participant D as NSB Daemon
 
-Daemon → AppClient (if message available)
-  manifest.code   = MESSAGE
-  metadata        = { src, dest, size }
-  message.payload = <payload>
-
-Daemon → AppClient (if no message)
-  manifest.code   = NO_MESSAGE
+    Note over A: op=RECEIVE, og=APP_CLIENT, code=CLIENT_REQUEST
+    A->>D: RECEIVE request [dest_id optional]
+    alt message available
+        Note over D: code=MESSAGE
+        D->>A: RECEIVE response [src, dest, size, payload]
+    else no message
+        Note over D: code=NO_MESSAGE
+        D->>A: RECEIVE response [NO_MESSAGE]
+    end
 ```
 
 

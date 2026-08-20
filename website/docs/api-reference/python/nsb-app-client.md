@@ -1,119 +1,125 @@
 ---
 sidebar_label: NSBAppClient
-sidebar_position: 5
+sidebar_position: 3
 ---
 
-# NSBAppClient (C++)
+# NSBAppClient (Python)
 
-Application-side client. Inherits from [NSBClient](/docs/api-reference/cpp/nsb-client).
+The application-side client. Provides a simplified network interface for your application code.
 
+---
 
 ## Constructor
 
-```cpp
-nsb::NSBAppClient nsb_conn(identifier, serverAddress, serverPort);
+```python
+nsb_conn = nsb.NSBAppClient(identifier, server_address, server_port)
 ```
 
 **Parameters:**
 
 | Parameter | Type | Description |
 |---|---|---|
-| `identifier` | `const std::string&` | Unique client identifier (e.g. `"node0"`). Must match `NSBSimClient` identifier in Per-Node mode. |
-| `serverAddress` | `std::string&` | IP address or hostname of the NSB Daemon. |
-| `serverPort` | `int` | Port number of the NSB Daemon. |
+| `identifier` | `str` | Unique identifier for this client (e.g. `"node0"`). Must match the corresponding `NSBSimClient` identifier when using Per-Node simulator mode. |
+| `server_address` | `str` | IP address or hostname where the NSB Daemon is running. |
+| `server_port` | `int` | Port number on which the NSB Daemon is listening. |
 
-**Construction behavior.** Upon construction, the client connects to the daemon, sends INIT, receives system configuration, and optionally connects to Redis.
+**Construction behavior.** Upon construction, the client:
+1. Connects to the NSB Daemon
+2. Sends an INIT message to register itself
+3. Receives and stores the system configuration
+4. Optionally connects to the Redis database (if `use_db` is enabled)
 
+:::note
+Keep the client alive throughout the simulation. In PUSH mode, this is required.
+:::
+
+---
 
 ## `send(dest_id, payload)`
 
-Sends a payload to a destination via NSB.
+Sends a payload to a destination through NSB.
 
-```cpp
-std::string key = nsb_conn.send(dest_id, payload);
+```python
+key = nsb_conn.send(dest_id, payload)
 ```
 
 **Parameters:**
 
 | Parameter | Type | Description |
 |---|---|---|
-| `dest_id` | `const std::string` | Identifier of the destination application client. |
-| `payload` | `std::string` | The payload data to send. |
+| `dest_id` | `str` | Identifier of the destination application client. |
+| `payload` | `bytes` | The data payload to send. |
 
-**Returns:** `std::string` — Redis key for stored message (if database is configured), otherwise empty string.
+**Returns:** `str | None` — The Redis key for the stored message if database is enabled, otherwise `None`.
 
-**Behavior:** Fire-and-forget. Creates a SEND message and transmits to daemon. Daemon routes to simulator.
+**Behavior:** Fire-and-forget. Creates an NSB SEND message and transmits it to the daemon. The key return is useful for debugging; it is not needed in normal operation.
 
 **Example:**
 
-```cpp
-std::string payload = "Hello, World!";
-nsb_conn.send("node1", payload);
+```python
+nsb_conn.send("node1", b"Hello, network!")
 ```
 
+---
 
-## `receive()`
+## `receive(dest_id=None, timeout=None)`
 
 Receives a payload via NSB.
 
-```cpp
-// Default — receive for self, with default timeout
-MessageEntry entry = nsb_conn.receive();
-
-// With explicit destination and timeout
-MessageEntry entry = nsb_conn.receive(&dest_id, timeout);
-
-// With timeout only
-MessageEntry entry = nsb_conn.receive(timeout);
-```
-
-**Signatures:**
-
-```cpp
-MessageEntry receive(std::string* destId, int timeout = DAEMON_RESPONSE_TIMEOUT);
-MessageEntry receive(int timeout = DAEMON_RESPONSE_TIMEOUT);
+```python
+entry = nsb_conn.receive()
+# or
+entry = nsb_conn.receive(dest_id="node0", timeout=10)
+# or
+entry = nsb_conn.receive(timeout=5)
 ```
 
 **Parameters:**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `destId` | `std::string*` | `nullptr` | Pointer to destination identifier. Pass `nullptr` to receive for self. |
-| `timeout` | `int` | `DAEMON_RESPONSE_TIMEOUT` (30s) | Seconds to wait. Use `0` for non-blocking poll. |
+| `dest_id` | `str \| None` | `None` | The destination client to receive for. Defaults to `None` (self). |
+| `timeout` | `int \| None` | `None` | Seconds to wait. `None` = block indefinitely. `0` = poll (non-blocking). |
 
-**Returns:** [`MessageEntry`](/docs/api-reference/cpp/message-entry) — Populated if message found; call `exists()` to check.
+**Returns:** [`MessageEntry`](/docs/api-reference/python/message-entry) `| None` — A populated `MessageEntry` if a message was received, otherwise `None`.
 
 **Behavior by mode:**
 
-- **PULL mode:** Sends RECEIVE request to daemon. Daemon responds with MESSAGE or NO_MESSAGE.
-- **PUSH mode:** Waits on RECV channel using `select` with given timeout. Use `timeout=0` for polling.
+- **PULL mode:** Sends a RECEIVE request to the daemon. Daemon responds with `MESSAGE` (containing payload) or `NO_MESSAGE`.
+- **PUSH mode:** Waits on the RECV communication channel using `select` with the given timeout. Use `timeout=0` for polling, `timeout=None` for blocking.
 
 **Example:**
 
-```cpp
-MessageEntry entry = nsb_conn.receive();
-if (entry.exists()) {
-    std::string payload = entry.payload_obj;
-    // process...
-}
+```python
+entry = nsb_conn.receive()
+if entry:
+    process(entry.payload)
+else:
+    print("No message available")
 ```
 
+---
 
-## `listenReceive()`
+## `listen()`
 
-Blocking listener — for use in dedicated listener threads.
+An asynchronous coroutine for receiving payloads.
 
-```cpp
-MessageEntry entry = nsb_conn.listenReceive();
+```python
+async def run():
+    received = await nsb_conn.listen()
+    if received:
+        process(received.payload)
 ```
 
-**Returns:** `MessageEntry`
+**Returns:** [`MessageEntry`](/docs/api-reference/python/message-entry) `| None`
 
-**Purpose:** Designed for a dedicated thread that blocks waiting for the next incoming payload, as an alternative to polling `receive()` in a loop.
+**Behavior:** Similar to `receive()` but designed for `async`/`await` contexts. Recommended for implementing asynchronous listener logic in asyncio-based applications. See [Async Listeners](/docs/api-reference/python/async-listeners) for a complete runnable example.
 
+---
 
 ## Go Deeper
 
-- [MessageEntry](/docs/api-reference/cpp/message-entry) — the struct returned by `receive()`
-- [NSBSimClient](/docs/api-reference/cpp/nsb-sim-client) — the simulator-side counterpart, plus complete app/sim examples
-- [Python NSBAppClient](/docs/api-reference/python/nsb-app-client) — the equivalent class in Python
+- [MessageEntry](/docs/api-reference/python/message-entry) — the object returned by `receive()`
+- [NSBSimClient](/docs/api-reference/python/nsb-sim-client) — the simulator-side counterpart
+- [Async Listeners](/docs/api-reference/python/async-listeners) — full asyncio usage pattern
+- [C++ NSBAppClient](/docs/api-reference/cpp/nsb-app-client) — the equivalent class in C++

@@ -27,11 +27,10 @@ In real-world co-simulation setups, developers face a common problem: their appl
 
 NSB solves this by acting as a clean intermediary:
 
-```
-┌──────────────────┐        ┌──────────────┐        ┌──────────────────────┐
-│   Application    │◄──────►│  NSB Daemon  │◄──────►│  Network Simulator   │
-│  (NSBAppClient)  │        │  (+ Redis)   │        │   (NSBSimClient)     │
-└──────────────────┘        └──────────────┘        └──────────────────────┘
+```mermaid
+flowchart LR
+    A["Application<br/>(NSBAppClient)"] <--> B["NSB Daemon<br/>(+ Redis)"]
+    B <--> C["Network Simulator<br/>(NSBSimClient)"]
 ```
 
 1. The **application** sends a payload using `NSBAppClient.send()`.

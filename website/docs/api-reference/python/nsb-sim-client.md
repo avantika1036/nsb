@@ -1,175 +1,123 @@
 ---
 sidebar_label: NSBSimClient
-sidebar_position: 6
+sidebar_position: 4
 ---
 
-# NSBSimClient (C++)
+# NSBSimClient (Python)
 
-Simulator-side client. Inherits from [NSBClient](/docs/api-reference/cpp/nsb-client).
+The simulator-side client. Integrates into network simulator code to route payloads through a simulated network.
 
+---
 
 ## Constructor
 
-```cpp
-nsb::NSBSimClient nsb_conn(identifier, serverAddress, serverPort);
-```
-
-**Parameters:** Same as `NSBAppClient` — see [NSBAppClient → Constructor](/docs/api-reference/cpp/nsb-app-client#constructor).
-
-:::note
-In **System-Wide** mode, only one `NSBSimClient` may connect. In **PUSH** mode, the client must remain connected throughout the simulation.
-:::
-
-
-## `fetch()`
-
-Fetches a payload waiting to be transmitted through the simulated network.
-
-```cpp
-// Default — fetch the most recent message, default timeout
-MessageEntry entry = nsb_conn.fetch();
-
-// With explicit source and timeout
-MessageEntry entry = nsb_conn.fetch(&src_id, timeout);
-
-// With timeout only
-MessageEntry entry = nsb_conn.fetch(timeout);
-```
-
-**Signatures:**
-
-```cpp
-MessageEntry fetch(std::string* srcId, int timeout = DAEMON_RESPONSE_TIMEOUT);
-MessageEntry fetch(int timeout = DAEMON_RESPONSE_TIMEOUT);
-```
-
-**Parameters:**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `srcId` | `std::string*` | `nullptr` | Pointer to source identifier to fetch from. `nullptr` = fetch most recent regardless of source. In Per-Node mode, this is overwritten with own ID. |
-| `timeout` | `int` | `DAEMON_RESPONSE_TIMEOUT` (30s) | Seconds to wait. Use `0` for non-blocking poll. |
-
-**Returns:** [`MessageEntry`](/docs/api-reference/cpp/message-entry) — Populated if message found.
-
-**Behavior:** Sends FETCH request to daemon. Daemon responds with MESSAGE or NO_MESSAGE.
-
-**Per-Node override:** In Per-Node mode, `srcId` is automatically set to the client's own identifier.
-
-**Example:**
-
-```cpp
-MessageEntry entry = nsb_conn.fetch();
-if (entry.exists()) {
-    std::string src = entry.source;
-    std::string dst = entry.destination;
-    std::string payload = entry.payload_obj;
-    // Simulate network transmission...
-    nsb_conn.post(src, dst, payload);
-}
-```
-
-
-## `post(src_id, dest_id, payload)`
-
-Posts a payload as arrived at its destination in the simulated network.
-
-```cpp
-std::string result = nsb_conn.post(src_id, dest_id, payload);
+```python
+nsb_conn = nsb.NSBSimClient(identifier, server_address, server_port)
 ```
 
 **Parameters:**
 
 | Parameter | Type | Description |
 |---|---|---|
-| `src_id` | `std::string` | Identifier of the source application client. |
-| `dest_id` | `std::string` | Identifier of the destination application client. |
-| `payload` | `std::string&` | The payload data to post. |
+| `identifier` | `str` | Unique identifier for this simulator client. Must match the corresponding `NSBAppClient` identifier in Per-Node mode. In System-Wide mode, one identifier is used for all. |
+| `server_address` | `str` | IP address or hostname of the NSB Daemon. |
+| `server_port` | `int` | Port number of the NSB Daemon. |
 
-**Returns:** `std::string` — Status or key from the post operation.
-
-**Behavior:** Creates a POST message with source, destination, and payload, then transmits to the daemon. Makes the payload available for `NSBAppClient(dest_id).receive()`.
-
-
-## `listenFetch()`
-
-Blocking listener — for use in dedicated fetcher threads.
-
-```cpp
-MessageEntry entry = nsb_conn.listenFetch();
-```
-
-**Returns:** `MessageEntry`
-
-**Purpose:** Designed for a dedicated thread that blocks waiting for the next payload to simulate, as an alternative to polling `fetch()` in a loop.
-
-
-## Complete Example
-
-### Application Side (`app_node.cpp`)
-
-```cpp
-#include "nsb_client.h"
-#include <iostream>
-
-int main() {
-    // Initialize
-    std::string server = "127.0.0.1";
-    int port = 65432;
-    nsb::NSBAppClient app("node0", server, port);
-
-    // Send
-    std::string outgoing = "Hello, World!";
-    app.send("node1", outgoing);
-
-    // Receive
-    nsb::MessageEntry entry = app.receive();
-    if (entry.exists()) {
-        std::cout << "Source: "  << entry.source      << "\n"
-                  << "Dest: "    << entry.destination  << "\n"
-                  << "Payload: " << entry.payload_obj  << "\n";
-    }
-    return 0;
-}
-```
-
-### Simulator Side (`sim_node.cpp`)
-
-```cpp
-#include "nsb_client.h"
-#include <iostream>
-
-int main() {
-    std::string server = "127.0.0.1";
-    int port = 65432;
-    nsb::NSBSimClient sim("node0", server, port);
-
-    // Fetch payload from NSB
-    nsb::MessageEntry entry = sim.fetch();
-    if (entry.exists()) {
-        std::string src = entry.source;
-        std::string dst = entry.destination;
-        std::string payload = entry.payload_obj;
-
-        std::cout << "Simulating: " << src << " -> " << dst << "\n";
-
-        // ... simulate network transmission ...
-
-        // Post back when "arrived"
-        sim.post(src, dst, payload);
-    }
-    return 0;
-}
-```
-
-:::note Note on AI Assistance
-Portions of this C++ documentation were generated with assistance from Anthropic's Claude, based on internal code documentation, and were heavily reviewed and edited by human contributors. The NSB team takes full responsibility for accuracy.
+:::note
+In **System-Wide** mode, only one `NSBSimClient` may connect. In **PUSH** mode, the client must remain connected for the duration of the simulation.
 :::
 
+---
+
+## `fetch(src_id=None, timeout=None)`
+
+Fetches a payload that was sent by an application client and is waiting to be routed through the simulated network.
+
+```python
+entry = nsb_conn.fetch()
+# or
+entry = nsb_conn.fetch(src_id="node0", timeout=10)
+```
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `src_id` | `str \| None` | `None` | Identifier of the source to fetch from. `None` = fetch the most recent message regardless of source. Overwritten with own ID in Per-Node mode. |
+| `timeout` | `int \| None` | `None` | Seconds to wait. `None` = wait indefinitely. `0` = non-blocking poll. |
+
+**Returns:** [`MessageEntry`](/docs/api-reference/python/message-entry) `| None`
+
+**Behavior by mode:**
+
+- **PULL mode:** Sends a FETCH request to the daemon. Daemon responds with `MESSAGE` or `NO_MESSAGE`.
+- **PUSH mode:** Waits for forwarded payloads from the daemon/broker.
+
+**Per-Node override:** When `sim_mode` is `PER_NODE`, `src_id` is automatically overwritten with the client's own identifier — it only fetches on its own behalf.
+
+**Example:**
+
+```python
+entry = nsb_conn.fetch()
+if entry:
+    src = entry.source
+    dst = entry.destination
+    payload = entry.payload
+    # Route payload through simulated network...
+    nsb_conn.post(src, dst, processed_payload)
+```
+
+---
+
+## `listen()`
+
+An asynchronous coroutine for fetching payloads.
+
+```python
+async def simulator_loop():
+    entry = await nsb_conn.listen()
+    if entry:
+        src_id = entry.source
+        dest_id = entry.destination
+        payload = entry.payload
+        # Send through simulated network...
+```
+
+**Returns:** [`MessageEntry`](/docs/api-reference/python/message-entry) `| None`
+
+**Behavior:** Similar to `fetch()` but for `async`/`await` contexts. See [Async Listeners](/docs/api-reference/python/async-listeners) for a complete runnable example.
+
+---
+
+## `post(src_id, dest_id, payload)`
+
+Notifies NSB that a payload has arrived at its destination within the simulated network and makes it available for reception by the application client.
+
+```python
+nsb_conn.post(src_id, dest_id, payload)
+```
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `src_id` | `str` | Identifier of the original source application client. |
+| `dest_id` | `str` | Identifier of the destination application client. |
+| `payload` | `bytes` | The payload data (may have been processed/modified by the simulator). |
+
+**Behavior:** Creates an NSB POST message with the source, destination, and payload, then transmits it to the daemon. The daemon stores or routes it so that `NSBAppClient(dest_id).receive()` can retrieve it.
+
+**Example:**
+
+```python
+nsb_conn.post(src_id="node0", dest_id="node1", payload=b"delivered payload")
+```
+
+---
 
 ## Go Deeper
 
-- [MessageEntry](/docs/api-reference/cpp/message-entry) — the struct returned by `fetch()`
-- [NSBAppClient](/docs/api-reference/cpp/nsb-app-client) — the application-side counterpart
-- [Python NSBSimClient](/docs/api-reference/python/nsb-sim-client) — the equivalent class in Python
-- [Tutorials → Build a Mock Simulator](/tutorials/beginner/build-a-mock-simulator) — a hands-on walkthrough (Python version)
+- [MessageEntry](/docs/api-reference/python/message-entry) — the object returned by `fetch()`
+- [NSBAppClient](/docs/api-reference/python/nsb-app-client) — the application-side counterpart
+- [Async Listeners](/docs/api-reference/python/async-listeners) — full asyncio usage pattern
+- [C++ NSBSimClient](/docs/api-reference/cpp/nsb-sim-client) — the equivalent class in C++

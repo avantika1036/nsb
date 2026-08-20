@@ -12,24 +12,24 @@ This page describes the internal architecture of NSB — its components, communi
 
 NSB consists of three logical layers:
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        Application Layer                            │
-│              NSBAppClient (Python or C++)                           │
-│         send() ──────────────────────────── receive()              │
-└──────────────────────────┬──────────────────────────────────────────┘
-                           │  TCP Socket or RabbitMQ
-┌──────────────────────────▼──────────────────────────────────────────┐
-│                         NSB Daemon                                  │
-│     Receives, routes, and optionally stores payloads in Redis       │
-│     Manages client registration and configuration distribution      │
-└──────────────────────────┬──────────────────────────────────────────┘
-                           │  TCP Socket or RabbitMQ
-┌──────────────────────────▼──────────────────────────────────────────┐
-│                      Simulator Layer                                │
-│              NSBSimClient (Python or C++)                           │
-│         fetch() ─────────────────────────── post()                 │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph APP["Application Layer"]
+        A["NSBAppClient\n(Python or C++)\nsend() · receive()"]
+    end
+
+    subgraph DAEMON["NSB Daemon"]
+        D["Central message broker\nRoutes payloads · Manages client registry\nDistributes configuration"]
+        R[("Redis\n(optional)")]
+        D <-->|"store / checkout"| R
+    end
+
+    subgraph SIM["Simulator Layer"]
+        S["NSBSimClient\n(Python or C++)\nfetch() · post()"]
+    end
+
+    APP <-->|"TCP Socket or RabbitMQ"| DAEMON
+    DAEMON <-->|"TCP Socket or RabbitMQ"| SIM
 ```
 
 
@@ -199,9 +199,16 @@ Full concept page: [System Modes](/docs/architecture/system-modes). To configure
 
 A single simulator client handles all message routing. When a payload is fetched, it can come from any source node.
 
-```
-AppClient(node0) ──send──► Daemon ──fetch──► SimClient (global)
-AppClient(node1) ──send──► Daemon ──fetch──► SimClient (global)
+```mermaid
+flowchart LR
+    A0["AppClient(node0)"]
+    A1["AppClient(node1)"]
+    D["Daemon"]
+    S["SimClient\n(global)"]
+
+    A0 -->|"send"| D
+    A1 -->|"send"| D
+    D -->|"fetch (any source)"| S
 ```
 
 **Best for:** Top-down simulators like **ns-3**, where a single simulation script manages the entire network.
@@ -212,9 +219,18 @@ AppClient(node1) ──send──► Daemon ──fetch──► SimClient (glob
 
 Each simulated node has its own simulator client. The client identifier for `NSBSimClient` must match the corresponding `NSBAppClient` identifier.
 
-```
-AppClient("node0") ──send──► Daemon ──fetch──► SimClient("node0")
-AppClient("node1") ──send──► Daemon ──fetch──► SimClient("node1")
+```mermaid
+flowchart LR
+    A0["AppClient(node0)"]
+    A1["AppClient(node1)"]
+    D["Daemon"]
+    S0["SimClient(node0)"]
+    S1["SimClient(node1)"]
+
+    A0 -->|"send"| D
+    A1 -->|"send"| D
+    D -->|"fetch (node0 only)"| S0
+    D -->|"fetch (node1 only)"| S1
 ```
 
 When `NSBSimClient("node0")` calls `fetch()`, it only retrieves messages sent from `AppClient("node0")`. When it calls `post()`, the payload is made available to `AppClient` at the destination.
@@ -228,11 +244,17 @@ Full concept page: [Simulator Modes](/docs/architecture/simulator-modes). To con
 
 ### Socket Backend (Default)
 
-```
-NSBAppClient ──TCP──► NSBDaemon ──TCP──► NSBSimClient
-                          │
-                        Redis
-                      (optional)
+```mermaid
+flowchart LR
+    A["NSBAppClient"]
+    D["NSBDaemon\n(full router)"]
+    S["NSBSimClient"]
+    R[("Redis\n(optional)")]
+
+    A <-->|"TCP"| D
+    D <-->|"TCP"| S
+    D -->|"store"| R
+    R -->|"checkout"| D
 ```
 
 - Uses raw TCP sockets for all communication
@@ -242,11 +264,18 @@ NSBAppClient ──TCP──► NSBDaemon ──TCP──► NSBSimClient
 
 ### RabbitMQ Backend
 
-```
-NSBAppClient ──AMQP──► RabbitMQ Broker ◄──AMQP── NSBSimClient
-                              │
-                          NSBDaemon
-                        (config only)
+```mermaid
+flowchart LR
+    A["NSBAppClient"]
+    B["RabbitMQ Broker\n(message routing)"]
+    S["NSBSimClient"]
+    D["NSBDaemon\n(config only)"]
+
+    A -->|"AMQP publish"| B
+    B -->|"AMQP deliver"| A
+    B <-->|"AMQP"| S
+    D -->|"INIT request"| B
+    B -->|"config response"| D
 ```
 
 - Uses AMQP protocol via RabbitMQ
