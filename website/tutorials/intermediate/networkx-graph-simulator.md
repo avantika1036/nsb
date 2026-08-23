@@ -104,10 +104,37 @@ sim.post(src, dst, payload)
 Exactly the same `post()` call as the mock simulator from the previous tutorial — NSB doesn't know or care that the delay this time came from a graph traversal.
 
 
+## Prerequisites
+
+Before starting this tutorial, ensure you have:
+
+- Completed the [Get Started](/get-started) guide and have NSB installed
+- The NSB daemon running with the correct configuration
+- NetworkX installed (see above)
+
+**Required daemon configuration:**
+
+The daemon must be configured in PUSH mode without Redis for this tutorial to work as shown. Your `config.yaml` should have:
+
+```yaml
+system:
+  mode: 1  # PUSH mode
+
+database:
+  use_db: false  # Disable Redis
+```
+
+Start the daemon with:
+```bash
+/usr/local/nsb/bin/nsb_daemon config.yaml
+```
+
+
 ## Full Working Code — 3-Node Example
 
-This simulator uses blocking `fetch()` — it waits until a message arrives before processing it. This is appropriate here because we have a single simulator client. This simulator uses blocking `fetch()` — it waits until a message arrives before processing it. This is appropriate here because we have a single simulator client. The previous tutorial used `fetch(timeout=0)` because it needed to poll multiple simulator clients without blocking on any one of them.
+This simulator uses blocking `fetch()` — it waits until a message arrives before processing it. This is appropriate here because we have a single simulator client. The previous tutorial used `fetch(timeout=0)` because it needed to poll multiple simulator clients without blocking on any one of them.
 
+**simulator.py:**
 ```python
 import time
 import networkx as nx
@@ -154,6 +181,26 @@ while True:
             flush=True
         )
 ```
+
+**app.py (to test the simulator):**
+```python
+import nsb_client as nsb
+import time
+
+app = nsb.NSBAppClient("node0", "127.0.0.1", 65432)
+app.send("node0", b"Hello from node0!")
+print("[app] Sent message", flush=True)
+print("[app] Waiting for reply...", flush=True)
+
+while True:
+    entry = app.receive()
+    if entry:
+        print(f"[app] Received: {entry.payload} from {entry.src_id}", flush=True)
+        break
+    time.sleep(0.1)
+```
+
+**Note:** Since the simulator is initialized as `"node0"`, the app sends to `"node0"` so the simulator will fetch and process the message.
 
 :::tip Extending This
 Try adding more nodes with `nx.path_graph(["node0", "node1", "node2", "node3", "node4"])`, or use `nx.random_geometric_graph()` for a more realistic, irregular topology. As long as you can look up a path with `nx.shortest_path()`, the delay calculation and `post()` call stay the same.
